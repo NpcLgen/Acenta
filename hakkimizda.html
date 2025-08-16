@@ -1,0 +1,374 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title data-i18n="page-title">Hakkımızda - Acenta Sitem</title>
+    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" integrity="sha512-9usAa10IRO0HhonpyAIVpjrylPvoDwiPUiKdWk5t3PyolY1cOd4DSE0Ga+ri4AuTroPR5aQvXU9xC6qOPnzFeg==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+    
+    <style>
+        /* Dropdown menüleri için gerekli CSS */
+        .header-right {
+            display: flex;
+            align-items: center;
+            margin-left: center;
+        }
+
+        .menu-container {
+            position: relative;
+            margin-left: 10px;
+        }
+
+        .menu-toggle {
+            padding: 8px 12px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+        }
+
+        .menu-toggle i {
+            font-size: 14px;
+            color: #333;
+        }
+
+        .menu-toggle:hover {
+            background-color: #f0f0f0;
+        }
+
+        .menu-content {
+            display: flex;
+            flex-direction: column;
+            position: absolute;
+            top: 100%;
+            right: 0;
+            background-color: #fff;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            z-index: 999;
+            opacity: 0;
+            visibility: hidden;
+            transform: translateY(-10px);
+            transition: opacity 0.3s ease, transform 0.3s ease, visibility 0s 0.3s;
+        }
+
+        .menu-content.is-active {
+            opacity: 1;
+            visibility: visible;
+            transform: translateY(0);
+            transition: opacity 0.3s ease, transform 0.3s ease;
+        }
+
+        .menu-content a {
+            padding: 10px 15px;
+            text-decoration: none;
+            color: #333;
+            white-space: nowrap;
+            border-bottom: 1px solid #eee;
+        }
+
+        .menu-content a:last-child {
+            border-bottom: none;
+        }
+
+        .menu-content a:hover {
+            background-color: #f0f0f0;
+        }
+
+        .main-nav ul {
+            list-style: none;
+            margin: 0;
+            padding: 0;
+            display: flex;
+        }
+        .main-nav ul li a {
+            font-size: 14px;
+            padding: 8px 12px;
+            text-decoration: none;
+            color: #333;
+            border-radius: 5px;
+            margin: 0 2px;
+            transition: background-color 0.3s ease;
+        }
+        .main-nav ul li a:hover {
+            background-color: #f0f0f0;
+        }
+    </style>
+</head>
+<body>
+
+    <header class="main-header">
+        <div class="header-left">
+            <div class="logo"><a href="index.html">LG</a></div>
+        </div>
+        <nav class="main-nav">
+            <ul>
+                <li><a href="index.html" data-i18n="nav-home">Ana Sayfa</a></li>
+                <li><a href="turlar.html" data-i18n="nav-tours">Turlar</a></li>
+                <li><a href="aktiviteler.html" data-i18n="nav-activities">Aktiviteler</a></li>
+                <li><a href="harita.html" data-i18n="nav-map">Harita</a></li>
+                <li><a href="hakkimizda.html" data-i18n="nav-about">Hakkımızda</a></li>
+                <li><a href="iletisim.html" data-i18n="nav-contact">İletişim</a></li>
+            </ul>
+        </nav>
+        <div class="header-right">
+            <div id="language-menu-container" class="menu-container">
+                <div class="menu-toggle" id="language-menu-toggle">
+                    <i class="fas fa-globe"></i>
+                </div>
+                <div class="menu-content" id="language-menu-content">
+                    <a href="#" class="lang-option" data-lang="tr">Türkçe</a>
+                    <a href="#" class="lang-option" data-lang="en">English</a>
+                    <a href="#" class="lang-option" data-lang="de">Deutsch</a>
+                </div>
+            </div>
+
+            <div id="auth-menu-container" class="menu-container">
+                <div class="menu-toggle" id="hamburger-menu-toggle">
+                    <i class="fas fa-bars"></i>
+                </div>
+                <div class="menu-content" id="hamburger-menu-content">
+                    <a href="giris.html" class="btn-login" data-i18n="auth-login">Giriş Yap</a>
+                    <a href="kayit.html" class="btn-register" data-i18n="auth-register">Kayıt Ol</a>
+                </div>
+            </div>
+        </div>
+    </header>
+
+<main class="content-area">
+    <section class="about-hero-section">
+        <h1 data-i18n="hero-title">Hikayemiz: Bir Tutkudan Doğan Macera</h1>
+    </section>
+
+    <div class="about-content-container">
+
+        <article class="about-text-column">
+            <h2 data-i18n="section1-title">LG Turizm: Keşfetmeye Dair Her Şey</h2>
+            <p data-i18n="section1-p1">Biz, iki kardeş, <strong>deneyim biriktirmeye</strong> seyahat tutkusuyla başladık. Yıllar boyunca sırt çantalarımızla dünyayı dolaştık, farklı kültürlerin izini sürdük, bilinmeyen şehirlerin dar sokaklarında kaybolduk ve her macerada kendimize yeni bir şeyler kattık. Biliyoruz ki, en iyi anılar sadece fotoğraflarda değil, kalpte biriktirilen hikayelerde saklıdır.</p>
+            <p data-i18n="section1-p2">LG Turizm, işte tam da bu tutkunun bir meyvesi olarak doğdu. Amacımız, sıradan tatil paketlerinin ötesine geçerek, insanlara gerçekten **anıya dönüşecek seyahatler** sunmak. Bizim için bir tur, sadece bir yerden bir yere gitmek değil; yeni bir insanla tanışmak, yerel bir lezzeti keşfetmek, güneşin doğuşunda bir dağın zirvesinde durup nefes almak demektir.</p>
+        </article>
+
+        <div class="about-image-slider">
+            <img src="https://picsum.photos/600/400?random=1" alt="LG Turizm Ekibi" class="slider-image active">
+            <img src="https://picsum.photos/600/400?random=2" alt="Kardeşler Olarak Gezi Anımız" class="slider-image">
+            <img src="https://picsum.photos/600/400?random=3" alt="Turistlerle Birlikte Fotoğraf" class="slider-image">
+        </div>
+
+        <article class="about-text-column about-text-full-width">
+            <h2 data-i18n="section2-title">Farkımız ve Değerlerimiz</h2>
+            <p data-i18n="section2-p1">Sektördeki en büyük farkımız, her turumuzu tıpkı kendimize hazırlıyormuş gibi özenle planlamamızdır. En küçük detayları bile düşünür, rotaları kendi deneyimlerimizle şekillendiririz. Sadece en iyi rehberlerle çalışır, gizli kalmış cennetleri rotalarımıza ekleriz. Bizimle seyahat eden herkesin kendini güvende, özel ve bir keşif yolculuğunun parçası olarak hissetmesini sağlarız.</p>
+            <p data-i18n="section2-p2">Vizyonumuz, gezginlerin hayallerini gerçeğe dönüştürmek ve onlara hayatları boyunca unutamayacakları maceralar yaşatmak. Değerlerimizin merkezinde ise **dürüstlük, sürdürülebilirlik ve insan odaklılık** var. Yaptığımız her işte, yerel topluluklara katkıda bulunmayı ve çevremize saygı duymayı önceliklendiriyoruz.</p>
+            <p data-i18n="section2-p3">Siz de bu hikayenin bir parçası olmak, bir sonraki maceranızda bizimle yola çıkmak ister misiniz? Unutulmaz anılarla dolu bir yolculukta buluşmak dileğiyle...</p>
+        </article>
+    </div>
+</main>
+
+    <footer class="main-footer-section">
+        <div class="footer-container">
+            <div class="footer-column">
+                <h3 data-i18n="footer-title">LG Turizm</h3>
+                <p data-i18n="footer-about">İki kardeşin seyahat tutkusundan doğan acentamızla, dünyanın dört bir yanındaki maceralara sizi de bekliyoruz. Unutulmaz anılar biriktirmek için doğru adrestesiniz.</p>
+            </div>
+            <div class="footer-column">
+                <h4 data-i18n="footer-links-title">Hızlı Linkler</h4>
+                <ul>
+                    <li><a href="index.html" data-i18n="nav-home">Ana Sayfa</a></li>
+                    <li><a href="turlar.html" data-i18n="nav-tours">Turlar</a></li>
+                    <li><a href="aktiviteler.html" data-i18n="nav-activities">Aktiviteler</a></li>
+                    <li><a href="hakkimizda.html" data-i18n="nav-about">Hakkımızda</a></li>
+                    <li><a href="iletisim.html" data-i18n="nav-contact">İletişim</a></li>
+                </ul>
+            </div>
+            <div class="footer-column">
+                <h4 data-i18n="footer-contact-title">İletişim</h4>
+                <p data-i18n="footer-address">📍 Adres: Örnek Mah. Gezgin Sok. No:12/3 Kadıköy, İstanbul</p>
+                <p data-i18n="footer-phone">📞 Telefon: +90 555 123 45 67</p>
+                <p data-i18n="footer-email">✉️ E-posta: bilgi@lgturizm.com</p>
+            </div>
+            <div class="footer-column">
+                <h4 data-i18n="footer-social-title">Bizi Takip Edin</h4>
+                <div class="social-icons">
+                    <a href="#" aria-label="Facebook">FB</a>
+                    <a href="#" aria-label="Instagram">IG</a>
+                    <a href="#" aria-label="Twitter">TW</a>
+                    <a href="#" aria-label="YouTube">YT</a>
+                </div>
+            </div>
+        </div>
+        <div class="footer-bottom">
+            <p data-i18n="footer-copyright">&copy; 2025 LG Turizm. Tüm Hakları Saklıdır.</p>
+        </div>
+    </footer>
+
+    <script src="main-auth.js"></script>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            // Dropdown menüleri için mevcut kod
+            const allMenuToggles = document.querySelectorAll('.menu-toggle');
+            const allMenuContents = document.querySelectorAll('.menu-content');
+
+            allMenuToggles.forEach(toggle => {
+                toggle.addEventListener('click', function(event) {
+                    event.stopPropagation();
+                    const targetMenuId = this.id.replace('-toggle', '-content');
+                    const targetMenu = document.getElementById(targetMenuId);
+
+                    allMenuContents.forEach(menu => {
+                        if (menu.id !== targetMenuId) {
+                            menu.classList.remove('is-active');
+                        }
+                    });
+
+                    targetMenu.classList.toggle('is-active');
+                });
+            });
+
+            document.addEventListener('click', function() {
+                allMenuContents.forEach(menu => {
+                    menu.classList.remove('is-active');
+                });
+            });
+
+            allMenuContents.forEach(menu => {
+                menu.addEventListener('click', function(event) {
+                    event.stopPropagation();
+                });
+            });
+            
+            const languageMenuContent = document.getElementById('language-menu-content');
+            languageMenuContent.querySelectorAll('a').forEach(option => {
+                option.addEventListener('click', function() {
+                    languageMenuContent.classList.remove('is-active');
+                });
+            });
+
+            // --- YENİ EKLENEN VE GÜNCELLENEN KISIM ---
+            // Çeviri veritabanı
+            const translations = {
+                'tr': {
+                    'page-title': 'Hakkımızda - Acenta Sitem',
+                    'nav-home': 'Ana Sayfa',
+                    'nav-tours': 'Turlar',
+                    'nav-activities': 'Aktiviteler',
+                    'nav-map': 'Harita',
+                    'nav-about': 'Hakkımızda',
+                    'nav-contact': 'İletişim',
+                    'auth-login': 'Giriş Yap',
+                    'auth-register': 'Kayıt Ol',
+                    'hero-title': 'Hikayemiz: Bir Tutkudan Doğan Macera',
+                    'section1-title': 'LG Turizm: Keşfetmeye Dair Her Şey',
+                    'section1-p1': 'Biz, iki kardeş, deneyim biriktirmeye seyahat tutkusuyla başladık. Yıllar boyunca sırt çantalarımızla dünyayı dolaştık, farklı kültürlerin izini sürdük, bilinmeyen şehirlerin dar sokaklarında kaybolduk ve her macerada kendimize yeni bir şeyler kattık. Biliyoruz ki, en iyi anılar sadece fotoğraflarda değil, kalpte biriktirilen hikayelerde saklıdır.',
+                    'section1-p2': 'LG Turizm, işte tam da bu tutkunun bir meyvesi olarak doğdu. Amacımız, sıradan tatil paketlerinin ötesine geçerek, insanlara gerçekten anıya dönüşecek seyahatler sunmak. Bizim için bir tur, sadece bir yerden bir yere gitmek değil; yeni bir insanla tanışmak, yerel bir lezzeti keşfetmek, güneşin doğuşunda bir dağın zirvesinde durup nefes almak demektir.',
+                    'section2-title': 'Farkımız ve Değerlerimiz',
+                    'section2-p1': 'Sektördeki en büyük farkımız, her turumuzu tıpkı kendimize hazırlıyormuş gibi özenle planlamamızdır. En küçük detayları bile düşünür, rotaları kendi deneyimlerimizle şekillendiririz. Sadece en iyi rehberlerle çalışır, gizli kalmış cennetleri rotalarımıza ekleriz. Bizimle seyahat eden herkesin kendini güvende, özel ve bir keşif yolculuğunun parçası olarak hissetmesini sağlarız.',
+                    'section2-p2': 'Vizyonumuz, gezginlerin hayallerini gerçeğe dönüştürmek ve onlara hayatları boyunca unutamayacakları maceralar yaşatmak. Değerlerimizin merkezinde ise dürüstlük, sürdürülebilirlik ve insan odaklılık var. Yaptığımız her işte, yerel topluluklara katkıda bulunmayı ve çevremize saygı duymayı önceliklendiriyoruz.',
+                    'section2-p3': 'Siz de bu hikayenin bir parçası olmak, bir sonraki maceranızda bizimle yola çıkmak ister misiniz? Unutulmaz anılarla dolu bir yolculukta buluşmak dileğiyle...',
+                    'footer-title': 'LG Turizm',
+                    'footer-about': 'İki kardeşin seyahat tutkusundan doğan acentamızla, dünyanın dört bir yanındaki maceralara sizi de bekliyoruz. Unutulmaz anılar biriktirmek için doğru adrestesiniz.',
+                    'footer-links-title': 'Hızlı Linkler',
+                    'footer-contact-title': 'İletişim',
+                    'footer-address': '📍 Adres: Örnek Mah. Gezgin Sok. No:12/3 Kadıköy, İstanbul',
+                    'footer-phone': '📞 Telefon: +90 555 123 45 67',
+                    'footer-email': '✉️ E-posta: bilgi@lgturizm.com',
+                    'footer-social-title': 'Bizi Takip Edin',
+                    'footer-copyright': '&copy; 2025 LG Turizm. Tüm Hakları Saklıdır.'
+                },
+                'en': {
+                    'page-title': 'About Us - My Agency Site',
+                    'nav-home': 'Homepage',
+                    'nav-tours': 'Tours',
+                    'nav-activities': 'Activities',
+                    'nav-map': 'Map',
+                    'nav-about': 'About Us',
+                    'nav-contact': 'Contact',
+                    'auth-login': 'Login',
+                    'auth-register': 'Register',
+                    'hero-title': 'Our Story: An Adventure Born from a Passion',
+                    'section1-title': 'LG Tourism: Everything About Discovery',
+                    'section1-p1': 'We, two brothers, started collecting experiences with a passion for travel. For years, we roamed the world with our backpacks, followed the traces of different cultures, got lost in the narrow streets of unknown cities, and added something new to ourselves in every adventure. We know that the best memories are not only in photos but also in stories collected in the heart.',
+                    'section1-p2': 'LG Tourism was born as the fruit of this passion. Our goal is to go beyond ordinary holiday packages and offer people truly memorable travels. For us, a tour is not just about going from one place to another; it means meeting a new person, discovering a local flavor, standing on a mountaintop at sunrise, and taking a breath.',
+                    'section2-title': 'Our Difference and Values',
+                    'section2-p1': 'Our biggest difference in the sector is that we plan every tour with as much care as we would for ourselves. We think about even the smallest details and shape the routes with our own experiences. We work only with the best guides and add hidden gems to our routes. We ensure that everyone who travels with us feels safe, special, and a part of a journey of discovery.',
+                    'section2-p2': 'Our vision is to turn travelers\' dreams into reality and give them adventures they will never forget. At the core of our values are honesty, sustainability, and being people-oriented. In everything we do, we prioritize contributing to local communities and respecting our environment.',
+                    'section2-p3': 'Would you like to be a part of this story and set off on your next adventure with us? We look forward to meeting you on a journey full of unforgettable memories...',
+                    'footer-title': 'LG Tourism',
+                    'footer-about': 'With our agency born from the passion for travel of two brothers, we welcome you to adventures all over the world. You are at the right place to collect unforgettable memories.',
+                    'footer-links-title': 'Quick Links',
+                    'footer-contact-title': 'Contact',
+                    'footer-address': '📍 Address: Sample Street. Gezgin Ave. No:12/3 Kadıköy, Istanbul',
+                    'footer-phone': '📞 Phone: +90 555 123 45 67',
+                    'footer-email': '✉️ Email: bilgi@lgturizm.com',
+                    'footer-social-title': 'Follow Us',
+                    'footer-copyright': '&copy; 2025 LG Tourism. All Rights Reserved.'
+                },
+                'de': {
+                    'page-title': 'Über uns - Meine Agentur-Website',
+                    'nav-home': 'Startseite',
+                    'nav-tours': 'Touren',
+                    'nav-activities': 'Aktivitäten',
+                    'nav-map': 'Karte',
+                    'nav-about': 'Über uns',
+                    'nav-contact': 'Kontakt',
+                    'auth-login': 'Anmelden',
+                    'auth-register': 'Registrieren',
+                    'hero-title': 'Unsere Geschichte: Ein Abenteuer aus Leidenschaft',
+                    'section1-title': 'LG Tourismus: Alles über das Entdecken',
+                    'section1-p1': 'Wir, zwei Brüder, haben begonnen, Erlebnisse mit einer Leidenschaft für das Reisen zu sammeln. Jahrelang sind wir mit unseren Rucksäcken durch die Welt gereist, haben den Spuren verschiedener Kulturen gefolgt, uns in den engen Gassen unbekannter Städte verlaufen und in jedem Abenteuer etwas Neues für uns entdeckt. Wir wissen, dass die besten Erinnerungen nicht nur in Fotos, sondern auch in den im Herzen gesammelten Geschichten bewahrt werden.',
+                    'section1-p2': 'LG Tourismus wurde als die Frucht genau dieser Leidenschaft geboren. Unser Ziel ist es, über gewöhnliche Urlaubspakete hinauszugehen und den Menschen Reisen anzubieten, die sich wirklich in unvergessliche Erinnerungen verwandeln. Für uns ist eine Tour nicht nur eine Reise von einem Ort zum anderen; es bedeutet, eine neue Person kennenzulernen, eine lokale Spezialität zu entdecken, im Morgengrauen auf einem Berggipfel zu stehen und tief durchzuatmen.',
+                    'section2-title': 'Unser Unterschied und unsere Werte',
+                    'section2-p1': 'Unser größter Unterschied in der Branche ist, dass wir jede unserer Touren mit derselben Sorgfalt planen, als würden wir sie für uns selbst vorbereiten. Wir denken an die kleinsten Details und gestalten die Routen mit unseren eigenen Erfahrungen. Wir arbeiten nur mit den besten Reiseführern zusammen und fügen unseren Routen versteckte Paradiese hinzu. Wir sorgen dafür, dass sich jeder, der mit uns reist, sicher, besonders und als Teil einer Entdeckungsreise fühlt.',
+                    'section2-p2': 'Unsere Vision ist es, die Träume von Reisenden wahr werden zu lassen und ihnen Abenteuer zu bescheren, die sie ihr ganzes Leben lang nicht vergessen werden. Im Mittelpunkt unserer Werte stehen Ehrlichkeit, Nachhaltigkeit und Menschlichkeit. Bei allem, was wir tun, legen wir Wert darauf, einen Beitrag zu den lokalen Gemeinschaften zu leisten und unsere Umwelt zu respektieren.',
+                    'section2-p3': 'Möchten Sie Teil dieser Geschichte sein und Ihr nächstes Abenteuer mit uns beginnen? Wir freuen uns darauf, Sie auf einer Reise voller unvergesslicher Erinnerungen zu treffen...',
+                    'footer-title': 'LG Tourismus',
+                    'footer-about': 'Mit unserer Agentur, die aus der Leidenschaft von zwei Brüdern für das Reisen entstanden ist, heißen wir Sie zu Abenteuern auf der ganzen Welt willkommen. Sie sind am richtigen Ort, um unvergessliche Erinnerungen zu sammeln.',
+                    'footer-links-title': 'Schnell-Links',
+                    'footer-contact-title': 'Kontakt',
+                    'footer-address': '📍 Adresse: Musterstraße. Wanderer Allee. Nr.12/3 Kadıköy, Istanbul',
+                    'footer-phone': '📞 Telefon: +90 555 123 45 67',
+                    'footer-email': '✉️ E-Mail: bilgi@lgturizm.com',
+                    'footer-social-title': 'Folgen Sie uns',
+                    'footer-copyright': '&copy; 2025 LG Tourismus. Alle Rechte vorbehalten.'
+                }
+            };
+
+            function setLanguage(lang) {
+                document.querySelectorAll('[data-i18n]').forEach(element => {
+                    const key = element.getAttribute('data-i18n');
+                    if (translations[lang] && translations[lang][key]) {
+                        element.innerHTML = translations[lang][key];
+                    }
+                });
+                localStorage.setItem('selectedLang', lang);
+                document.documentElement.lang = lang;
+            }
+
+            const langOptions = document.querySelectorAll('.lang-option');
+            langOptions.forEach(option => {
+                option.addEventListener('click', function(e) {
+                    e.preventDefault();
+                    const lang = this.getAttribute('data-lang');
+                    setLanguage(lang);
+                });
+            });
+
+            const savedLang = localStorage.getItem('selectedLang') || 'tr';
+            setLanguage(savedLang);
+            
+            // Slider işlevi
+            const images = document.querySelectorAll('.slider-image');
+            let currentImageIndex = 0;
+
+            function showNextImage() {
+                images[currentImageIndex].classList.remove('active');
+                currentImageIndex = (currentImageIndex + 1) % images.length;
+                images[currentImageIndex].classList.add('active');
+            }
+
+            setInterval(showNextImage, 4000);
+        });
+    </script>
+</body>
+</html>

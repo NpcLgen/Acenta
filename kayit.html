@@ -1,0 +1,426 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title data-i18n="page-title">Kayıt Ol - Acenta Sitem</title>
+  <link rel="stylesheet" href="style.css"/>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" integrity="sha512-9usAa10IRO0HhonpyAIVpjrylPvoDwiPUiKdWk5t3PyolY1cOd4DSE0Ga+ri4AuTroPR5aQvXU9xC6qOPnzFeg==" crossorigin="anonymous" referrerpolicy="no-referrer"/>
+
+  <style>
+    /* ================== AYARLANABİLİR ÖLÇÜ PARAMETRELERİ ================== */
+    :root{
+      --panel-width: 420px;              /* Tüm panel genişliği */
+      --gap: 14px;
+      --input-height: 42px;              /* Input yüksekliği */
+      --input-font-size: 15px;           /* Input yazı boyutu */
+      --input-radius: 10px;              /* Köşe yarıçapı */
+      --input-padding-x: 12px;           /* Sol/sağ iç boşluk */
+      --eye-size: 20px;                  /* Göz ikon boyutu */
+      --eye-pad-right: 10px;             /* Göz ile sağ kenar arası */
+    }
+
+    /* ================== HEADER DROPDOWN (mevcudu bozmaz) ================== */
+    .header-right{display:flex;align-items:center;margin-left:center}
+    .menu-container{position:relative;margin-left:10px}
+    .menu-toggle{padding:8px 12px;border:1px solid #ccc;border-radius:5px;cursor:pointer;transition:background-color .3s}
+    .menu-toggle i{font-size:14px;color:#333}
+    .menu-toggle:hover{background:#f0f0f0}
+    .menu-content{display:flex;flex-direction:column;position:absolute;top:100%;right:0;background:#fff;border:1px solid #ccc;border-radius:5px;box-shadow:0 4px 8px rgba(0,0,0,.1);z-index:999;opacity:0;visibility:hidden;transform:translateY(-10px);transition:opacity .3s, transform .3s, visibility 0s .3s}
+    .menu-content.is-active{opacity:1;visibility:visible;transform:translateY(0);transition:opacity .3s, transform .3s}
+    .menu-content a{padding:10px 15px;text-decoration:none;color:#333;white-space:nowrap;border-bottom:1px solid #eee}
+    .menu-content a:last-child{border-bottom:none}
+    .menu-content a:hover{background:#f0f0f0}
+    .main-nav ul{list-style:none;margin:0;padding:0;display:flex}
+    .main-nav ul li a{font-size:14px;padding:8px 12px;text-decoration:none;color:#333;border-radius:5px;margin:0 2px;transition:background-color .3s}
+    .main-nav ul li a:hover{background:#f0f0f0}
+
+    /* ================== FORM GENEL ================== */
+    .auth-form{width:100%;max-width:var(--panel-width);margin:32px auto;background:#fff;border-radius:12px;padding:22px;box-shadow:0 6px 20px rgba(0,0,0,.06)}
+    .auth-row{display:flex;gap:var(--gap)}
+    .auth-field{margin-bottom:var(--gap);flex:1}
+    .auth-field label{display:block;margin-bottom:6px;font-weight:600}
+    .auth-input{
+      width:100%;height:var(--input-height);
+      border:1px solid #dcdcdc;border-radius:var(--input-radius);
+      font-size:var(--input-font-size);
+      padding:0 calc(var(--input-padding-x) + var(--eye-size) + var(--eye-pad-right) + 6px) 0 var(--input-padding-x); /* sağa ikon alanı */
+      box-sizing:border-box;
+    }
+    .auth-input.is-invalid{border-color:#e74c3c;background:#fff6f6}
+    .auth-error{display:none;color:#e74c3c;font-size:13px;margin-top:6px}
+    .auth-error.is-visible{display:block}
+    .auth-hint{font-size:12px;color:#6b7280;margin-top:6px}
+    .auth-actions{margin-top:12px}
+    .auth-btn{width:100%;padding:12px;border:none;border-radius:8px;background:#007BFF;color:#fff;font-weight:700;font-size:16px;cursor:pointer;opacity:1;transition:opacity .2s}
+    .auth-btn:disabled{opacity:.5;cursor:not-allowed}
+
+    /* İki sütun mobilde alta geçsin */
+    @media (max-width:768px){ .auth-row{flex-direction:column} }
+
+    /* ================== ŞİFRE GÖZ İKONU (INPUT İÇİNDE) ================== */
+    .password-wrap{position:relative}
+    .pw-toggle{
+      position:absolute;right:var(--eye-pad-right);top:50%;
+      transform:translateY(-50%);
+      width:calc(var(--eye-size) + 8px);height:calc(var(--eye-size) + 8px);
+      border:none;background:transparent;cursor:pointer;padding:0;display:flex;align-items:center;justify-content:center
+    }
+    .pw-toggle i{font-size:var(--eye-size);color:#555}
+
+    /* ================== ŞİFRE GÜCÜ BAR + RENKLER ================== */
+    .pass-strength{height:8px;background:#eef2f7;border-radius:999px;margin-top:10px;overflow:hidden}
+    .pass-strength span{display:block;height:100%;width:0;transition:width .25s ease}
+    .ps-weak{background:#ef4444}   /* kırmızı */
+    .ps-fair{background:#f59e0b}   /* sarı */
+    .ps-strong{background:#10b981} /* yeşil */
+    .pass-strength-msg{font-size:12px;color:#6b7280;margin-top:6px}
+
+    /* ================== E-POSTA SATIR İÇİ İPUCU ================== */
+    .email-inline-hint{font-size:12px;color:#a16207;display:none;margin-top:6px}
+
+    /* ================== KVKK/ŞARTLAR ================== */
+    .auth-consent{display:flex;gap:10px;align-items:flex-start}
+    .auth-consent label{font-size:14px;line-height:1.5}
+    .auth-consent a{color:#007BFF;text-decoration:underline}
+
+    /* ================== MODAL ================== */
+    .modal{position:fixed;inset:0;display:none;align-items:center;justify-content:center;background:rgba(0,0,0,.5);z-index:10000}
+    .modal.is-open{display:flex}
+    .modal-dialog{width:min(800px,92vw);max-height:80vh;background:#fff;border-radius:12px;box-shadow:0 12px 40px rgba(0,0,0,.2);display:flex;flex-direction:column}
+    .modal-header{padding:16px 20px;border-bottom:1px solid #eee;display:flex;align-items:center;justify-content:space-between}
+    .modal-title{margin:0;font-size:18px}
+    .modal-close{background:none;border:none;font-size:22px;cursor:pointer}
+    .modal-body{padding:16px 20px;overflow:auto}
+    .modal-footer{padding:12px 20px;border-top:1px solid #eee;text-align:right}
+    .btn{padding:8px 14px;border-radius:8px;border:1px solid #ddd;background:#f9f9f9;cursor:pointer}
+    .btn-primary{background:#007BFF;border-color:#007BFF;color:#fff}
+
+    /* ================== LOCALSTORAGE E‑POSTA LİSTESİ ================== */
+    .saved-box{width:100%;max-width:var(--panel-width);margin:14px auto 40px;background:#fff;border-radius:12px;padding:16px;box-shadow:0 6px 20px rgba(0,0,0,.04)}
+    .saved-row{display:flex;gap:10px;margin-top:10px}
+    .saved-row input{flex:1;height:var(--input-height);border:1px solid #dcdcdc;border-radius:var(--input-radius);padding:0 var(--input-padding-x);font-size:var(--input-font-size)}
+    .saved-row button{height:var(--input-height);padding:0 12px;border-radius:8px;border:1px solid #ddd;background:#f9f9f9;cursor:pointer}
+    .email-list{margin:10px 0 0;padding:0;list-style:none}
+    .email-list li{display:flex;align-items:center;justify-content:space-between;padding:8px 10px;border:1px solid #eee;border-radius:8px;margin-bottom:8px}
+    .email-list button{border:1px solid #eee;background:#fafafa;border-radius:6px;padding:6px 10px;cursor:pointer}
+  </style>
+</head>
+<body>
+<header class="main-header">
+  <div class="header-left">
+    <div class="logo"><a href="index.html">LG</a></div>
+  </div>
+  <nav class="main-nav">
+    <ul>
+      <li><a href="index.html" data-i18n="nav-home">Ana Sayfa</a></li>
+      <li><a href="turlar.html" data-i18n="nav-tours">Turlar</a></li>
+      <li><a href="aktiviteler.html" data-i18n="nav-activities">Aktiviteler</a></li>
+      <li><a href="harita.html" data-i18n="nav-map">Harita</a></li>
+      <li><a href="hakkimizda.html" data-i18n="nav-about">Hakkımızda</a></li>
+      <li><a href="iletisim.html" data-i18n="nav-contact">İletişim</a></li>
+    </ul>
+  </nav>
+  <div class="header-right">
+    <div id="language-menu-container" class="menu-container">
+      <div class="menu-toggle" id="language-menu-toggle"><i class="fas fa-globe"></i></div>
+      <div class="menu-content" id="language-menu-content">
+        <a href="#" class="lang-option" data-lang="tr">Türkçe</a>
+        <a href="#" class="lang-option" data-lang="en">English</a>
+        <a href="#" class="lang-option" data-lang="de">Deutsch</a>
+      </div>
+    </div>
+    <div id="auth-menu-container" class="menu-container">
+      <div class="menu-toggle" id="hamburger-menu-toggle"><i class="fas fa-bars"></i></div>
+      <div class="menu-content" id="hamburger-menu-content">
+        <a href="giris.html" class="btn-login" data-i18n="auth-login">Giriş Yap</a>
+        <a href="kayit.html" class="btn-register" data-i18n="auth-register">Kayıt Ol</a>
+      </div>
+    </div>
+  </div>
+</header>
+
+<main>
+  <section class="auth-form" aria-labelledby="register-title">
+    <h1 id="register-title">Kayıt Ol</h1>
+    <p class="subtitle">Yeni hesap oluştur.</p>
+
+    <form id="register-form" novalidate>
+      <div class="auth-row">
+        <div class="auth-field">
+          <label for="reg-name">Ad</label>
+          <input id="reg-name" name="name" type="text" class="auth-input" required>
+          <div class="auth-error" id="reg-name-error">Ad gerekli.</div>
+        </div>
+        <div class="auth-field">
+          <label for="reg-surname">Soyad</label>
+          <input id="reg-surname" name="surname" type="text" class="auth-input" required>
+          <div class="auth-error" id="reg-surname-error">Soyad gerekli.</div>
+        </div>
+      </div>
+
+      <div class="auth-field">
+        <label for="reg-email">E‑posta</label>
+        <input id="reg-email" name="email" type="email" class="auth-input" placeholder="ornek@mail.com" required>
+        <div class="email-inline-hint" id="email-at-hint"></div>
+        <div class="auth-error" id="reg-email-error">Geçerli bir e‑posta girin.</div>
+      </div>
+
+      <!-- Şifre -->
+      <div class="auth-field password-wrap">
+        <label for="reg-password">Şifre</label>
+        <input id="reg-password" name="password" type="password" class="auth-input" placeholder="En az 6 karakter" required minlength="6">
+        <button type="button" class="pw-toggle" data-target="#reg-password" aria-label="Şifreyi göster/gizle">
+          <i class="fa-regular fa-eye-slash"></i>
+        </button>
+        <div class="auth-hint">Büyük/küçük harf, rakam ve özel karakter önerilir.</div>
+        <div class="pass-strength" aria-hidden="true"><span id="reg-pass-bar"></span></div>
+        <div id="reg-pass-msg" class="pass-strength-msg">Şifre gücü: —</div>
+        <div class="auth-error" id="reg-pass-error">Şifre en az 6 karakter olmalı.</div>
+      </div>
+
+      <!-- Şifre (Tekrar) -->
+      <div class="auth-field password-wrap">
+        <label for="reg-password2">Şifre (Tekrar)</label>
+        <input id="reg-password2" type="password" class="auth-input" placeholder="Şifreyi tekrar yazın" required>
+        <button type="button" class="pw-toggle" data-target="#reg-password2" aria-label="Şifreyi göster/gizle">
+          <i class="fa-regular fa-eye-slash"></i>
+        </button>
+        <div class="auth-error" id="reg-pass2-error">Şifreler aynı olmalı.</div>
+      </div>
+
+      <div class="auth-actions">
+        <div class="auth-consent">
+          <input type="checkbox" id="reg-consent" required>
+          <label for="reg-consent">
+            <a href="#" id="kvkk-link">KVKK Aydınlatma</a> ve
+            <a href="#" id="terms-link">Şartlar</a>’ı okudum, kabul ediyorum.
+          </label>
+        </div>
+        <div class="auth-error" id="reg-consent-error">Devam etmek için onayı vermelisiniz.</div>
+
+        <button class="auth-btn" id="reg-submit" type="submit" disabled>Kayıt Ol</button>
+      </div>
+    </form>
+  </section>
+
+  <!-- Kayıtlı e‑postalar kutusu -->
+  <section class="saved-box" aria-labelledby="saved-title">
+    <h3 id="saved-title">Kayıtlı E‑postalar</h3>
+    <ul id="email-list" class="email-list"></ul>
+    <div class="saved-row">
+      <input type="email" id="email-add" placeholder="yeni@mail.com"/>
+      <button id="email-add-btn" class="btn">Ekle</button>
+    </div>
+  </section>
+</main>
+
+<footer class="main-footer-section">
+  <div class="footer-container">
+    <div class="footer-column">
+      <h3 data-i18n="footer-title">LG Turizm</h3>
+      <p data-i18n="footer-about">İki kardeşin seyahat tutkusundan doğan acentamızla, dünyanın dört bir yanındaki maceralara sizi de bekliyoruz. Unutulmaz anılar biriktirmek için doğru adrestesiniz.</p>
+    </div>
+    <div class="footer-column">
+      <h4 data-i18n="footer-links-title">Hızlı Linkler</h4>
+      <ul>
+        <li><a href="index.html" data-i18n="nav-home">Ana Sayfa</a></li>
+        <li><a href="turlar.html" data-i18n="nav-tours">Turlar</a></li>
+        <li><a href="aktiviteler.html" data-i18n="nav-activities">Aktiviteler</a></li>
+        <li><a href="hakkimizda.html" data-i18n="nav-about">Hakkımızda</a></li>
+        <li><a href="iletisim.html" data-i18n="nav-contact">İletişim</a></li>
+      </ul>
+    </div>
+    <div class="footer-column">
+      <h4 data-i18n="footer-contact-title">İletişim</h4>
+      <p data-i18n="footer-address">📍 Adres: Örnek Mah. Gezgin Sok. No:12/3 Kadıköy, İstanbul</p>
+      <p data-i18n="footer-phone">📞 Telefon: +90 555 123 45 67</p>
+      <p data-i18n="footer-email">✉️ E-posta: bilgi@lgturizm.com</p>
+    </div>
+    <div class="footer-column">
+      <h4 data-i18n="footer-social-title">Bizi Takip Edin</h4>
+      <div class="social-icons">
+        <a href="#" aria-label="Facebook">FB</a>
+        <a href="#" aria-label="Instagram">IG</a>
+        <a href="#" aria-label="Twitter">TW</a>
+        <a href="#" aria-label="YouTube">YT</a>
+      </div>
+    </div>
+  </div>
+  <div class="footer-bottom">
+    <p data-i18n="footer-copyright">&copy; 2025 LG Turizm. Tüm Hakları Saklıdır.</p>
+  </div>
+</footer>
+
+<!-- KVKK MODAL -->
+<div class="modal" id="kvkk-modal" aria-hidden="true" role="dialog" aria-labelledby="kvkk-title">
+  <div class="modal-dialog">
+    <div class="modal-header">
+      <h3 class="modal-title" id="kvkk-title">KVKK Aydınlatma Metni</h3>
+      <button class="modal-close" data-close="#kvkk-modal" aria-label="Kapat">×</button>
+    </div>
+    <div class="modal-body">
+      <p><b>LG Turizm Seyahat Acentesi</b> olarak, 6698 sayılı Kişisel Verilerin Korunması Kanunu (“KVKK”) kapsamında veri sorumlusu sıfatıyla hareket ediyoruz. Bu metin; kişisel verilerinizin hangi amaçlarla işlendiği, hangi yöntemlerle toplandığı, kimlere ve hangi amaçla aktarılabileceği ve KVKK kapsamındaki haklarınızı açıklamak amacıyla hazırlanmıştır.</p>
+      <p><b>İşlenen Veriler ve Amaçlar:</b> Ad-soyad, iletişim bilgileri (e‑posta, telefon), rezervasyon tercihleri, ödeme ve faturalama bilgileri, seyahat geçmişi gibi veriler; rezervasyon işlemlerinin yürütülmesi, müşteri desteği, yasal yükümlülüklerin yerine getirilmesi, kampanya ve bilgilendirme ile hizmet kalitesinin artırılması amaçlarıyla işlenmektedir.</p>
+      <p><b>Toplama Yöntemi ve Hukuki Sebep:</b> Veriler; internet sitemiz, çağrı merkezimiz, sözleşmeler, e‑posta ve mobil uygulamalar üzerinden otomatik yollarla veya fiziki yollarla toplanır. KVKK m.5/2 ve m.6 hükümleri uyarınca sözleşmenin kurulması/ifası, hukuki yükümlülük, meşru menfaat ya da açık rıza hukuki sebeplerine dayanılır.</p>
+      <p><b>Aktarım:</b> Yasal gereklilikler uyarınca ilgili kamu kurumlarına; ödeme ve barındırma hizmeti sağlayıcılarımıza, iş ortaklarımıza ve tedarikçilerimize sınırlı ve gerekli ölçüde aktarım yapılabilir. Yurt dışına aktarım, açık rıza veya KVKK’da öngörülen istisnalar kapsamında gerçekleştirilebilir.</p>
+      <p><b>Haklarınız:</b> KVKK m.11 uyarınca; verilerinize erişme, düzeltme, silme, işleme faaliyetini kısıtlama, itiraz ve zarar halinde tazmin talep etme haklarına sahipsiniz. Başvurularınızı web sitemizdeki iletişim kanalları üzerinden iletebilirsiniz.</p>
+      <p><b>Saklama Süresi:</b> Kişisel veriler, ilgili mevzuatta belirtilen süreler ve meşru amaçlar doğrultusunda saklanır; amacın ortadan kalkması halinde veya talep üzerine silinir, yok edilir ya da anonim hale getirilir.</p>
+      <p>Detaylı bilgi için bizimle iletişime geçebilirsiniz.</p>
+    </div>
+    <div class="modal-footer">
+      <button class="btn" data-close="#kvkk-modal">Kapat</button>
+    </div>
+  </div>
+</div>
+
+<!-- ŞARTLAR MODAL -->
+<div class="modal" id="terms-modal" aria-hidden="true" role="dialog" aria-labelledby="terms-title">
+  <div class="modal-dialog">
+    <div class="modal-header">
+      <h3 class="modal-title" id="terms-title">Kullanım Şartları ve Üyelik Sözleşmesi</h3>
+      <button class="modal-close" data-close="#terms-modal" aria-label="Kapat">×</button>
+    </div>
+    <div class="modal-body">
+      <p>Bu web sitesini kullanarak aşağıdaki şart ve koşulları kabul etmiş sayılırsınız. Lütfen üyelik işlemlerine başlamadan önce dikkatle okuyunuz.</p>
+      <p><b>Hizmet Kapsamı:</b> LG Turizm; yurt içi ve yurt dışı tur paketleri, ulaşım ve konaklama hizmetlerinin aracılığını yapar. Yayınlanan fiyatlar ve kontenjanlar anlıktır; üçüncü taraf sağlayıcıların güncellemelerine tabidir.</p>
+      <p><b>Rezervasyon ve Ödeme:</b> Rezervasyon, ödeme onayı ile kesinleşir. Cayma/iptal koşulları ürün sayfasında ayrıca belirtilir. Bankacılık işlemlerinden kaynaklanan gecikmelerden acentemiz sorumlu değildir.</p>
+      <p><b>Kullanıcı Yükümlülükleri:</b> Kayıt bilgileri doğru ve güncel tutulmalıdır. Hesabınızın güvenliğinden siz sorumlusunuz. Siteyi hukuka aykırı veya izinsiz amaçlarla kullanmanız yasaktır.</p>
+      <p><b>İçerik ve Fikri Haklar:</b> Site içeriğinin her hakkı saklıdır. İzinsiz kopyalama ve dağıtım yapılamaz.</p>
+      <p><b>Sorumluluk Reddi:</b> Mücbir sebepler, üçüncü taraf hataları ve önceden öngörülemeyen durumlarda hizmetlerde aksama yaşanabilir. Bu gibi durumlarda sorumluluk sınırlıdır.</p>
+      <p><b>Değişiklik:</b> Şartlar, gerekli görüldüğünde önceden bildirim yapılmaksızın güncellenebilir. Güncel metin sitede yayımlandığı anda yürürlüğe girer.</p>
+      <p><b>Uygulanacak Hukuk:</b> İşbu sözleşme Türkiye Cumhuriyeti hukukuna tabidir ve ihtilaflarda İstanbul (Merkez) mahkemeleri yetkilidir.</p>
+    </div>
+    <div class="modal-footer">
+      <button class="btn" data-close="#terms-modal">Kapat</button>
+    </div>
+  </div>
+</div>
+
+<!-- KAYIT BAŞARI MODALI -->
+<div class="modal" id="success-modal" aria-hidden="true" role="dialog" aria-labelledby="success-title">
+  <div class="modal-dialog">
+    <div class="modal-header">
+      <h3 class="modal-title" id="success-title">Kayıt Başarılı</h3>
+      <button class="modal-close" data-close="#success-modal" aria-label="Kapat">×</button>
+    </div>
+    <div class="modal-body">
+      <p>Tebrikler! Kayıt işleminiz başarıyla tamamlandı. Şimdi giriş yapabilirsiniz.</p>
+    </div>
+    <div class="modal-footer">
+      <button class="btn btn-primary" id="success-ok">Tamam</button>
+    </div>
+  </div>
+</div>
+
+<!-- Auth akışını yöneten JS (kayıt/giriş/oturum ve başarı modali tetikleme) -->
+<script src="main-auth.js"></script>
+
+<script>
+document.addEventListener('DOMContentLoaded', function () {
+  /* ================== Header menü ================== */
+  const allMenuToggles=document.querySelectorAll('.menu-toggle');
+  const allMenuContents=document.querySelectorAll('.menu-content');
+  allMenuToggles.forEach(t=>{
+    t.addEventListener('click',function(e){
+      e.stopPropagation();
+      const id=this.id.replace('-toggle','-content');
+      const target=document.getElementById(id);
+      allMenuContents.forEach(m=>{ if(m.id!==id) m.classList.remove('is-active');});
+      target.classList.toggle('is-active');
+    });
+  });
+  document.addEventListener('click',()=>allMenuContents.forEach(m=>m.classList.remove('is-active')));
+  allMenuContents.forEach(m=>m.addEventListener('click',e=>e.stopPropagation()));
+  const languageMenuContent=document.getElementById('language-menu-content');
+  languageMenuContent.querySelectorAll('a').forEach(a=>a.addEventListener('click',()=>languageMenuContent.classList.remove('is-active')));
+
+  /* ================== Basit i18n ================== */
+  const translations={
+    tr:{'page-title':'Kayıt Ol - Acenta Sitem','nav-home':'Ana Sayfa','nav-tours':'Turlar','nav-activities':'Aktiviteler','nav-map':'Harita','nav-about':'Hakkımızda','nav-contact':'İletişim','auth-login':'Giriş Yap','auth-register':'Kayıt Ol'},
+    en:{'page-title':'Register - My Agency Site','nav-home':'Homepage','nav-tours':'Tours','nav-activities':'Activities','nav-map':'Map','nav-about':'About Us','nav-contact':'Contact','auth-login':'Login','auth-register':'Register'},
+    de:{'page-title':'Registrieren - Meine Agentur-Website','nav-home':'Startseite','nav-tours':'Touren','nav-activities':'Aktivitäten','nav-map':'Karte','nav-about':'Über uns','nav-contact':'Kontakt','auth-login':'Anmelden','auth-register':'Registrieren'}
+  };
+  function setLanguage(lang){
+    document.querySelectorAll('[data-i18n]').forEach(el=>{
+      const k=el.getAttribute('data-i18n');
+      if(translations[lang] && translations[lang][k]){
+        if(el.tagName==='INPUT' && el.hasAttribute('placeholder')) el.setAttribute('placeholder',translations[lang][k]);
+        else el.innerHTML=translations[lang][k];
+      }
+    });
+    localStorage.setItem('selectedLang',lang);
+    document.documentElement.lang=lang;
+  }
+  document.querySelectorAll('.lang-option').forEach(o=>{
+    o.addEventListener('click',function(e){e.preventDefault();setLanguage(this.dataset.lang);});
+  });
+  setLanguage(localStorage.getItem('selectedLang')||'tr');
+
+  /* ================== E‑posta “@” ipucu ================== */
+  const emailEl=document.getElementById('reg-email');
+  const emailHint=document.getElementById('email-at-hint');
+  function updateEmailHint(){
+    const show=emailEl.value && !emailEl.value.includes('@');
+    emailHint.style.display=show?'block':'none';
+    emailHint.textContent= show ? 'E‑posta adresinizde @ karakteri olmalı.' : '';
+  }
+  emailEl.addEventListener('input',updateEmailHint); updateEmailHint();
+
+  /* ================== KVKK/Şartlar modalları aç/kapa ================== */
+  function openModal(sel){ const m=document.querySelector(sel); if(m){ m.classList.add('is-open'); } }
+  function closeModal(sel){ const m=document.querySelector(sel); if(m){ m.classList.remove('is-open'); } }
+  document.getElementById('kvkk-link').addEventListener('click', (e)=>{ e.preventDefault(); openModal('#kvkk-modal'); });
+  document.getElementById('terms-link').addEventListener('click', (e)=>{ e.preventDefault(); openModal('#terms-modal'); });
+  document.querySelectorAll('.modal-close,[data-close]').forEach(b=>{
+    b.addEventListener('click',()=>{
+      const sel=b.getAttribute('data-close');
+      if(sel) closeModal(sel); else b.closest('.modal')?.classList.remove('is-open');
+    });
+  });
+  document.querySelectorAll('.modal').forEach(m=>{
+    m.addEventListener('click',e=>{ if(e.target===m) m.classList.remove('is-open'); });
+  });
+
+  /* ================== LocalStorage e‑posta listesi ================== */
+  const LS_KEY='savedEmails';
+  const listEl=document.getElementById('email-list');
+  const addInput=document.getElementById('email-add');
+  const addBtn=document.getElementById('email-add-btn');
+
+  function getEmails(){
+    try{ return JSON.parse(localStorage.getItem(LS_KEY))||[]; }catch(_){ return []; }
+  }
+  function setEmails(arr){ localStorage.setItem(LS_KEY, JSON.stringify(arr)); renderEmails(); }
+  function renderEmails(){
+    const arr=getEmails();
+    listEl.innerHTML = arr.length? '' : '<li>Henüz kayıtlı e‑posta yok.</li>';
+    arr.forEach((em,i)=>{
+      const li=document.createElement('li');
+      li.innerHTML = `<span>${em}</span> <span><button data-i="${i}" class="btn-del">Sil</button></span>`;
+      listEl.appendChild(li);
+    });
+    listEl.querySelectorAll('.btn-del').forEach(btn=>{
+      btn.addEventListener('click',()=>{
+        const i=+btn.getAttribute('data-i');
+        const arr=getEmails(); arr.splice(i,1); setEmails(arr);
+      });
+    });
+  }
+  addBtn.addEventListener('click',()=>{
+    const v=addInput.value.trim();
+    if(!v || !/^\S+@\S+\.\S+$/.test(v)) return;
+    const arr=getEmails(); if(!arr.includes(v)){ arr.push(v); setEmails(arr); }
+    addInput.value='';
+  });
+  renderEmails();
+
+  /* ================== Başarı → girişe git ================== */
+  document.getElementById('success-ok').addEventListener('click',()=>{
+    closeModal('#success-modal');
+    window.location.href='giris.html';
+  });
+});
+</script>
+</body>
+</html>

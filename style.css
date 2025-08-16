@@ -1,0 +1,1326 @@
+/* Genel sayfa ayarları */
+body { margin: 0; font-family: Arial, sans-serif; background-color: #f4f4f4; }
+
+/* DÜZELTİLMİŞ HEADER YAPISI */
+.main-header {
+    background-color: #e0eaf0;
+    padding: 25px 40px;
+    display: flex;
+    align-items: center;
+    box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+
+    /* 1. DÜZELTME: Header'ı referans noktası yapıyoruz. */
+    position: relative;
+
+    /* 2. DÜZELTME: İçindeki ana elemanı (menüyü) ortalıyoruz. */
+    justify-content: center;
+}
+
+/* --- HARİTA SAYFASI İÇİN EKSTRA STİLLER --- */
+
+#map {
+    width: 100%;
+    height: 600px; /* Haritayı daha büyük yapalım */
+    background-color: #e9e9e9;
+    border-radius: 8px;
+    margin-top: 30px;
+    box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+}
+
+/* Bilgi Penceresi (InfoWindow) içeriğinin stili */
+.info-window-content {
+    padding: 5px;
+}
+.info-window-content h3 {
+    margin: 0 0 5px 0;
+    color: #0056b3;
+}
+.info-window-content p {
+    margin: 0 0 10px 0;
+}
+
+/* Tur kartındaki Haritada Gör linki */
+.map-link {
+    display: block;
+    text-align: center;
+    padding: 10px;
+    background-color: #28a745; /* Yeşil renk */
+    color: white;
+    font-weight: bold;
+    text-decoration: none;
+    margin: 10px 20px 20px 20px;
+    border-radius: 5px;
+    transition: background-color 0.2s ease;
+}
+.map-link:hover {
+    background-color: #218838;
+}
+
+/* 3. DÜZELTME: Sol bloğu mutlak olarak sola sabitliyoruz. */
+.header-left {
+    position: absolute;
+    left: 40px; /* Header'ın sol padding değeriyle aynı */
+    display: flex;
+    align-items: center;
+}
+
+.logo a {
+    font-family: 'Times New Roman', Times, serif;
+    font-size: 48px;
+    font-weight: bold;
+    color: #8B4513;
+    text-decoration: none;
+}
+
+/* Tam Ortalanmış Ana Navigasyon */
+.main-nav ul {
+    margin: 0;
+    padding: 0;
+    list-style: none;
+    display: flex;
+}
+
+.main-nav ul li {
+    margin: 0 15px;
+}
+
+.main-nav ul li a {
+    text-decoration: none;
+    color: #333;
+    font-size: 18px;
+    font-weight: bold;
+    padding: 10px;
+    transition: color 0.2s;
+}
+
+.main-nav ul li a:hover {
+    color: #007BFF;
+}
+
+/* 4. DÜZELTME: Sağ bloğu mutlak olarak sağa sabitliyoruz. */
+.auth-buttons {
+    position: absolute;
+    right: 40px; /* Header'ın sağ padding değeriyle aynı */
+}
+
+.auth-buttons a {
+    padding: 10px 20px;
+    margin-left: 10px;
+    text-decoration: none;
+    border-radius: 5px;
+    font-weight: bold;
+}
+.auth-buttons .btn-login { color: #333; }
+.auth-buttons .btn-register { color: white; background-color: #007BFF; }
+/* --- HARİTA SAYFASI İÇİN ÖZEL STİLLER --- */
+
+/* --- YENİ: ANA SAYFA - HERO BÖLÜMÜ STİLLERİ --- */
+
+/* Hero bölümünün tamamını kaplayan ana taşıyıcı */
+.hero-section {
+    position: relative; /* İçindeki elemanları buna göre konumlandıracağız */
+    height: 90vh; /* Ekran yüksekliğinin %90'ını kaplasın */
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    text-align: center;
+    color: white;
+    overflow: hidden; /* Taşmaları engelle */
+}
+
+/* Arka plan görselini içeren katman */
+.hero-background {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    /* Arka plan görseli - URL'yi istediğiniz bir görselle değiştirebilirsiniz */
+    background-image: url('https://picsum.photos/1920/1080?grayscale&blur=2');
+    background-size: cover; /* Resmi alana sığdır */
+    background-position: center center;
+    z-index: -2; /* İçeriğin arkasında kalsın */
+}
+
+/* Arka plan üzerine hafif bir karartma efekti (yazıların okunabilirliği için) */
+.hero-background::after {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.5); /* Siyah, %50 şeffaflıkta */
+    z-index: -1;
+}
+
+/* Başlık, alt başlık ve arama panelini içeren merkezdeki içerik */
+.hero-content {
+    max-width: 800px;
+    padding: 20px;
+}
+
+.hero-content h1 {
+    font-size: 56px;
+    margin-bottom: 10px;
+    text-shadow: 2px 2px 8px rgba(0,0,0,0.7);
+}
+
+.hero-subtitle {
+    font-size: 22px;
+    margin-bottom: 40px;
+    font-weight: 300;
+}
+
+/* Arama Paneli */
+.search-panel {
+    background-color: rgba(255, 255, 255, 0.9);
+    padding: 15px;
+    border-radius: 8px;
+    display: flex;
+    justify-content: space-between;
+    gap: 10px;
+    box-shadow: 0 4px 15px rgba(0,0,0,0.2);
+}
+
+.search-panel input,
+.search-panel select {
+    border: 1px solid #ccc;
+    padding: 15px;
+    border-radius: 5px;
+    font-size: 16px;
+}
+
+.search-panel input {
+    flex-grow: 1; /* Mevcut boşluğu doldurarak genişlesin */
+}
+
+.search-panel select {
+    flex-basis: 200px; /* Sabit bir genişlik */
+}
+
+.search-btn {
+    background-color: #007BFF;
+    color: white;
+    border: none;
+    padding: 0 30px;
+    font-size: 16px;
+    font-weight: bold;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: background-color 0.2s ease;
+}
+
+.search-btn:hover {
+    background-color: #0056b3;
+}
+
+/* Google Haritası panelinin stili */
+#map {
+    width: 100%;
+    /* YÜKSEKLİK VERMEK ZORUNLUDUR, yoksa harita görünmez! */
+    height: 500px;
+    background-color: #e9e9e9; /* Harita yüklenene kadar bir arka plan rengi */
+    border-radius: 8px;
+    margin-top: 30px;
+    box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+}
+
+/* --- YENİ: ANA SAYFA - NEDEN BİZ? BÖLÜMÜ STİLLERİ --- */
+
+.features-section {
+    padding: 60px 20px; /* Bölümün üstünde ve altında boşluk bırak */
+    background-color: #f9f9f9; /* Hero bölümünden farklı, çok hafif bir arka plan rengi */
+}
+
+.features-container {
+    max-width: 1200px; /* İçeriğin maksimum genişliği */
+    margin: 0 auto; /* Konteyneri sayfanın ortasına hizala */
+    display: flex; /* Özellikleri yan yana dizmek için */
+    justify-content: space-around; /* Eşit aralıklarla dağıt */
+    flex-wrap: wrap; /* Ekran daraldığında alt satıra geçmelerini sağla */
+    gap: 30px; /* Kutular arasına boşluk bırak */
+}
+
+.feature-item {
+    background-color: #ffffff;
+    padding: 30px;
+    border-radius: 8px;
+    box-shadow: 0 4px 15px rgba(0,0,0,0.05);
+    text-align: center;
+    /* Flexbox'ta her bir öğenin kaplayacağı alanı belirler */
+    /* 4 öğe için yaklaşık %20'lik bir alan ayırıyoruz (boşluklar hariç) */
+    flex-basis: 20%;
+    min-width: 250px; /* Dar ekranlarda çok küçülmesini engelle */
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.feature-item:hover {
+    transform: translateY(-10px); /* Fare üzerine gelince hafifçe yukarı kalksın */
+    box-shadow: 0 8px 25px rgba(0,0,0,0.1);
+}
+
+.feature-icon {
+    font-size: 48px; /* İkonların boyutu */
+    margin-bottom: 20px;
+}
+
+.feature-item h3 {
+    font-size: 22px;
+    color: #333;
+    margin-bottom: 10px;
+}
+
+.feature-item p {
+    font-size: 16px;
+    line-height: 1.6;
+    color: #666;
+    margin: 0;
+}
+
+/* Lokasyon Butonları */
+.location-buttons {
+    text-align: center;
+    margin: 20px 0;
+    display: flex;
+    flex-wrap: wrap; /* Butonlar sığmazsa alt satıra geçsin */
+    justify-content: center;
+    gap: 10px;
+}
+
+.location-btn {
+    background-color: #f8f9fa;
+    border: 1px solid #dee2e6;
+    color: #495057;
+    padding: 10px 20px;
+    border-radius: 5px;
+    font-size: 16px;
+    font-weight: bold;
+    cursor: pointer;
+    transition: all 0.2s ease;
+}
+
+.location-btn:hover {
+    background-color: #e2e6ea;
+    border-color: #dae0e5;
+    transform: translateY(-2px); /* Hafif yukarı kalkma efekti */
+}
+
+/* --- FİLTRELEME SAYFALARI İÇİN ORTAK STİLLER --- */
+.filter-controls { text-align: center; margin: 40px 0 30px 0; }
+.filter-btn { background-color: #fff; border: 2px solid #ddd; color: #555; padding: 10px 25px; margin: 0 5px; border-radius: 20px; font-size: 16px; cursor: pointer; transition: all 0.3s ease; }
+.filter-btn:hover { background-color: #e9e9e9; border-color: #ccc; }
+.filter-btn.active { background-color: #007BFF; color: white; border-color: #007BFF; }
+
+/* --- YENİ: ANA SAYFA - POPÜLER TURLAR BÖLÜMÜ STİLLERİ --- */
+
+.popular-tours-section {
+    padding: 60px 20px;
+    background-color: #ffffff; /* Arka planı beyaz yaparak diğer bölümlerden ayır */
+}
+
+/* Tüm bölümlerde kullanabileceğimiz genel bir başlık stili */
+.section-title {
+    text-align: center;
+    font-size: 36px;
+    color: #333;
+    margin-top: 0;
+    margin-bottom: 50px;
+    font-weight: 700;
+}
+
+/* 
+   Tur kartları (.tour-grid, .tour-card vb.) için yeni stil yazmamıza gerek yok, 
+   çünkü bu stiller zaten Turlar sayfası için tanımlanmıştı ve burada da geçerli olacak.
+   Sadece tur kartlarındaki linkin stilini ana sayfada farklılaştıralım.
+*/
+
+/* Ana sayfadaki popüler tur kartlarındaki linkin stili */
+.popular-tours-section .tour-card .map-link {
+    display: block;
+    text-align: center;
+    padding: 12px;
+    background-color: #007BFF;
+    color: white;
+    font-weight: bold;
+    text-decoration: none;
+    margin: 10px 20px 20px 20px;
+    border-radius: 5px;
+    transition: background-color 0.2s ease;
+}
+
+.popular-tours-section .tour-card .map-link:hover {
+    background-color: #0056b3;
+}
+
+/* Grid ve Kart stilleri */
+/* --- GÜNCELLENMİŞ KART GALERİSİ STİLİ (2'li Sütun İçin) --- */
+
+.tour-grid, .activity-grid {
+    display: grid; /* Tekrar Grid'e dönüyoruz */
+    
+    /* İki adet eşit genişlikte sütun oluşturur. '1fr' "kalan boşluğun 1 birimi" demektir. */
+    grid-template-columns: repeat(3, 1fr); 
+    
+    gap: 30px; /* Sütunlar ve satırlar arasındaki boşluk */
+    
+    /* Grid'i ortalamak için bu iki satır gerekebilir, eğer gridin kendisi dar ise */
+    max-width: 1200px; /* Konteynerin çok fazla genişlemesini önle */
+    margin: 0 auto; /* Konteyneri yatayda ortala */
+}
+
+/* Kartın ana taşıyıcısı */
+.tour-card, .activity-card {
+    background-color: white;
+    border-radius: 8px;
+    box-shadow: 0 4px 10px rgba(0,0,0,0.08);
+    overflow: hidden;
+    
+    /* 1. KURAL: Kartı bir Flex konteyneri yapıyoruz ve elemanları dikey diziyoruz */
+    display: flex;
+    flex-direction: column;
+}
+
+/* Kartın başlığı */
+.tour-card h3, .activity-card h3 {
+    font-size: 22px;
+    color: #333;
+    padding: 15px 20px 5px 20px;
+    margin: 0;
+}
+
+/* Kartın açıklama paragrafı */
+.tour-card p, .activity-card p {
+    font-size: 15px;
+    line-height: 1.6;
+    color: #666;
+    padding: 0 20px 20px 20px;
+    margin: 0;
+    
+    /* 2. KURAL: Bu paragrafın, mevcut boşluğu doldurarak esnemesini sağlıyoruz */
+    /* Bu sayede kısa metinli kartlarda bile buton en aşağıda kalır */
+    flex-grow: 1;
+}
+
+/* Ana sayfadaki popüler tur kartlarındaki linkin stilinde de küçük bir değişiklik */
+/* Bu zaten vardı, sadece kontrol edelim */
+.popular-tours-section .tour-card .map-link {
+    display: block;
+    text-align: center;
+    padding: 12px;
+    background-color: #007BFF;
+    color: white;
+    font-weight: bold;
+    text-decoration: none;
+    /* 3. KURAL: Metin esnediği için, bu butonun en sonda kalmasını garantiliyoruz */
+    /* Bu butona margin-top ekleyerek kendisini yukarıdaki paragraftan ayırır */
+    margin: auto 20px 20px 20px;
+}
+/* Ana Sayfa İçerik Stilleri */
+.content-area { max-width: 800px; margin: 40px auto; padding: 0 20px; }
+.article-card { background-color: white; border-radius: 8px; box-shadow: 0 4px 10px rgba(0,0,0,0.08); margin-bottom: 40px; overflow: hidden; }
+.article-card img { width: 100%; height: auto; display: block; }
+.article-card h2 { font-size: 28px; color: #333; padding: 20px 25px 10px 25px; margin: 0; }
+.article-card p { font-size: 16px; line-height: 1.6; color: #555; padding: 0 25px 20px 25px; margin: 0; }
+.article-card .read-more { display: inline-block; padding: 10px 20px; margin: 0 25px 25px 25px; background-color: #007BFF; color: white; text-decoration: none; border-radius: 5px; font-weight: bold; }
+
+/* --- YENİ: TUR DETAY SAYFASI STİLLERİ --- */
+
+.tour-detail-hero {
+    height: 60vh;
+    background-size: cover;
+    background-position: center;
+    display: flex;
+    align-items: flex-end; /* İçeriği aşağıya yasla */
+    justify-content: center;
+    text-align: center;
+    color: white;
+    position: relative;
+}
+/* Arka plan resminin üzerine karartma efekti */
+.tour-detail-hero::after {
+    content: ''; position: absolute; top: 0; left: 0; width: 100%; height: 100%;
+    background: linear-gradient(to top, rgba(0,0,0,0.7), transparent);
+}
+.tour-detail-hero-content {
+    position: relative; z-index: 2; padding: 40px;
+}
+.tour-detail-hero h1 {
+    font-size: 52px; text-shadow: 2px 2px 8px rgba(0,0,0,0.8); margin: 0;
+}
+
+/* Sayfa gövdesinin genel düzeni (içerik ve kenar çubuğu) */
+.tour-detail-body {
+    max-width: 1200px;
+    margin: 40px auto;
+    padding: 20px;
+    display: flex;
+    gap: 40px;
+}
+.tour-main-column { flex: 2; } /* Ana içerik alanı daha geniş olsun */
+.tour-sidebar { flex: 1; }   /* Kenar çubuğu daha dar olsun */
+
+.tour-main-column h2 { font-size: 28px; border-bottom: 2px solid #eee; padding-bottom: 10px; margin-bottom: 20px; }
+.tour-main-column p { font-size: 16px; line-height: 1.8; color: #555; }
+
+.gallery-grid {
+    display: grid; grid-template-columns: repeat(auto-fill, minmax(200px, 1fr)); gap: 10px;
+}
+.gallery-grid img { width: 100%; height: auto; border-radius: 5px; }
+
+/* Kenar çubuğu (sidebar) stilleri */
+.info-box {
+    background-color: #f9f9f9;
+    border: 1px solid #e9e9e9;
+    border-radius: 8px;
+    padding: 20px;
+    margin-bottom: 20px;
+}
+.info-box h3, .info-box h4 { margin-top: 0; }
+.info-box ul { list-style: '✓ '; padding-left: 20px; }
+.info-box ul li { margin-bottom: 8px; }
+
+/* --- GÜNCELLENMİŞ REZERVASYON BUTONU STİLİ --- */
+
+.btn-book-now {
+    display: block;
+    width: 100%;
+    box-sizing: border-box; /* Padding ve border'ın genişliğe dahil olmasını sağlar */
+    
+    /* ÖLÇÜLERİ DİĞER BUTONLA AYNI YAPIYORUZ */
+    padding: 12px;
+    font-size: 16px;
+    
+    background-color: #28a745; /* Yeşil rengi koruyoruz */
+    color: white;
+    text-align: center;
+    text-decoration: none;
+    font-weight: bold;
+    border-radius: 5px;
+    transition: background-color 0.2s;
+}
+
+.btn-book-now:hover {
+    background-color: #218838;
+}
+
+.loader { text-align: center; font-size: 24px; padding: 100px; }
+
+.btn-show-on-map {
+    display: block;
+    width: 100%;
+    box-sizing: border-box; /* Padding ve border'ın genişliğe dahil olmasını sağlar */
+    padding: 12px;
+    margin-bottom: 10px; /* Alttaki butonla arasına boşluk koy */
+    background-color: #17a2b8; /* Farklı bir renk (turkuaz) */
+    color: white;
+    text-align: center;
+    text-decoration: none;
+    font-size: 16px;
+    font-weight: bold;
+    border-radius: 5px;
+    transition: background-color 0.2s;
+}
+
+.btn-show-on-map:hover {
+    background-color: #138496;
+}
+
+/* --- YENİ: ANA SAYFA - BLOG BÖLÜMÜ STİLLERİ --- */
+
+.blog-section {
+    padding: 60px 20px;
+    background-color: #f9f9f9; /* Arka planı diğer bölümlerden ayır */
+}
+
+/* Blog kartlarını içeren grid yapısı */
+.blog-grid {
+    display: grid;
+    /* 3 sütunlu bir yapı, her biri eşit genişlikte */
+    grid-template-columns: repeat(3, 1fr);
+    gap: 30px; /* Kartlar arası boşluk */
+    max-width: 1200px;
+    margin: 0 auto;
+}
+
+.blog-card {
+    background-color: #ffffff;
+    border-radius: 8px;
+    box-shadow: 0 4px 15px rgba(0,0,0,0.05);
+    overflow: hidden; /* Resmin köşelerden taşmasını önle */
+    display: flex;
+    flex-direction: column; /* İçeriği dikeyde diz */
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.blog-card:hover {
+    transform: translateY(-10px);
+    box-shadow: 0 8px 25px rgba(0,0,0,0.1);
+}
+
+.blog-image-link img {
+    width: 100%;
+    height: 200px;
+    object-fit: cover; /* Resmi orantılı bir şekilde alana sığdır */
+    display: block;
+}
+
+.blog-content {
+    padding: 25px;
+    display: flex;
+    flex-direction: column;
+    flex-grow: 1; /* Kartın kalan tüm boşluğunu doldurmasını sağla */
+}
+
+.blog-category {
+    margin: 0 0 10px 0;
+    color: #007BFF;
+    font-size: 12px;
+    font-weight: bold;
+    letter-spacing: 1px; /* Harf aralığı */
+}
+
+.blog-title {
+    font-size: 20px;
+    margin: 0 0 15px 0;
+    line-height: 1.4;
+}
+
+/* Başlık linklerinin rengi ve alt çizgi ayarı */
+.blog-title a {
+    color: #333;
+    text-decoration: none;
+    transition: color 0.2s;
+}
+
+.blog-title a:hover {
+    color: #007BFF;
+}
+
+.blog-excerpt {
+    font-size: 15px;
+    line-height: 1.6;
+    color: #666;
+    margin: 0 0 20px 0;
+    flex-grow: 1; /* Başlık ve kategori sabitken, bu alan esneyerek "Devamını Oku" linkini en alta iter */
+}
+
+.blog-read-more {
+    color: #007BFF;
+    text-decoration: none;
+    font-weight: bold;
+    font-size: 14px;
+}
+
+.blog-read-more:hover {
+    text-decoration: underline;
+}
+
+/* Ekran daraldığında blog kartlarının davranışını düzenleyelim */
+@media (max-width: 992px) {
+    .blog-grid {
+        grid-template-columns: repeat(2, 1fr); /* 2 sütuna düşür */
+    }
+}
+
+@media (max-width: 768px) {
+    .blog-grid {
+        grid-template-columns: 1fr; /* Tek sütuna düşür */
+    }
+}
+/* --- YENİ: ANA SAYFA - MÜŞTERİ YORUMLARI BÖLÜMÜ STİLLERİ --- */
+
+.testimonials-section {
+    padding: 60px 20px;
+    background-color: #ffffff; /* Arka planı beyaz yapalım */
+}
+
+.testimonials-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr); /* 3 sütunlu yapı */
+    gap: 30px;
+    max-width: 1200px;
+    margin: 0 auto;
+}
+
+.testimonial-card {
+    background-color: #f9f9f9;
+    padding: 35px;
+    border-radius: 8px;
+    border-left: 5px solid #007BFF; /* Sol kenara markalama rengiyle vurgu */
+    box-shadow: 0 4px 15px rgba(0,0,0,0.05);
+    display: flex;
+    flex-direction: column;
+}
+
+.testimonial-text {
+    font-size: 17px;
+    font-style: italic;
+    line-height: 1.7;
+    color: #555;
+    margin: 0 0 30px 0;
+    flex-grow: 1; /* Yorum metninin esneyerek yazarı en alta itmesini sağlar */
+}
+
+/* Yorum metninin başına ve sonuna tırnak işareti ekleyelim */
+.testimonial-text::before {
+    content: '“';
+    font-size: 48px;
+    color: #e0e0e0;
+    line-height: 0;
+    display: block;
+    margin-bottom: 10px;
+}
+
+.testimonial-author {
+    display: flex;
+    align-items: center;
+}
+
+.testimonial-author img {
+    width: 60px;
+    height: 60px;
+    border-radius: 50%; /* Resmi yuvarlak yapar */
+    margin-right: 15px;
+    object-fit: cover;
+}
+
+.author-info {
+    line-height: 1.2;
+}
+
+.author-name {
+    font-weight: bold;
+    color: #333;
+    margin: 0;
+}
+
+.author-tour {
+    font-size: 14px;
+    color: #777;
+    margin: 5px 0 0 0;
+}
+
+/* Mobil cihazlar için yorum kartlarının davranışını düzenleyelim */
+@media (max-width: 992px) {
+    .testimonials-grid {
+        grid-template-columns: repeat(2, 1fr); /* 2 sütuna düşür */
+    }
+}
+
+@media (max-width: 768px) {
+    .testimonials-grid {
+        grid-template-columns: 1fr; /* Tek sütuna düşür */
+    }
+}
+/* --- YENİ: FOOTER (ALT BİLGİ) BÖLÜMÜ STİLLERİ --- */
+
+.main-footer-section {
+    background-color: #2c3e50; /* Koyu lacivert/gri bir arka plan */
+    color: #ecf0f1; /* Açık, okunaklı bir yazı rengi */
+    padding-top: 50px;
+}
+
+.footer-container {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 0 20px;
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); /* Esnek grid yapısı */
+    gap: 40px;
+}
+
+.footer-column h3, .footer-column h4 {
+    color: #ffffff;
+    margin-top: 0;
+    margin-bottom: 20px;
+    border-bottom: 2px solid #3498db; /* Mavi bir vurgu çizgisi */
+    padding-bottom: 10px;
+    display: inline-block;
+}
+
+.footer-column p {
+    line-height: 1.7;
+    color: #bdc3c7; /* Biraz daha soluk bir yazı rengi */
+    margin: 0 0 10px 0;
+}
+
+.footer-column ul {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+}
+
+.footer-column ul li {
+    margin-bottom: 12px;
+}
+
+.footer-column ul li a {
+    color: #bdc3c7;
+    text-decoration: none;
+    transition: color 0.2s, padding-left 0.2s;
+}
+
+.footer-column ul li a:hover {
+    color: #ffffff;
+    padding-left: 5px; /* Üzerine gelince hafif sağa kaysın */
+}
+
+/* Sosyal Medya İkonları */
+.social-icons {
+    display: flex;
+    gap: 15px;
+}
+
+.social-icons a {
+    display: inline-flex;
+    justify-content: center;
+    align-items: center;
+    width: 40px;
+    height: 40px;
+    background-color: #34495e;
+    color: #ecf0f1;
+    text-decoration: none;
+    font-weight: bold;
+    border-radius: 50%;
+    transition: background-color 0.2s, transform 0.2s;
+}
+
+.social-icons a:hover {
+    background-color: #3498db; /* Vurgu rengimiz */
+    transform: translateY(-3px); /* Yukarı kalkma efekti */
+}
+
+/* Footer'ın en altındaki telif hakkı bölümü */
+.footer-bottom {
+    text-align: center;
+    padding: 20px;
+    margin-top: 40px;
+    background-color: #233140; /* Biraz daha koyu bir ton */
+    border-top: 1px solid #34495e;
+}
+
+.footer-bottom p {
+    margin: 0;
+    font-size: 14px;
+    color: #95a5a6;
+}
+/* --- Mobil Cihazlar İçin Kart Galerisi Ayarı --- */
+
+@media (max-width: 768px) {
+    /* Ekran 768px'den darsa */
+    .tour-grid, .activity-grid {
+        /* Sütun sayısını 1'e düşür */
+        grid-template-columns: 1fr;
+    }
+}
+/* --- YENİ: REZERVASYON SAYFASI STİLLERİ --- */
+
+.reservation-body {
+    display: flex;
+    gap: 40px;
+    margin-top: 30px;
+}
+.reservation-form-column { flex: 2; }
+.tour-summary-column { flex: 1; }
+
+/* Form Stilleri */
+#booking-form { display: flex; flex-direction: column; gap: 25px; }
+.form-group { display: flex; flex-direction: column; }
+.form-row { display: flex; gap: 20px; }
+.form-row .form-group { flex: 1; } /* Satırdaki gruplar eşit genişlesin */
+
+.form-group label {
+    margin-bottom: 8px;
+    font-weight: bold;
+    color: #555;
+}
+.form-group input,
+.form-group textarea,
+.form-group select {
+    padding: 12px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    font-size: 16px;
+    font-family: Arial, sans-serif;
+}
+.form-group textarea { resize: vertical; } /* Sadece dikeyde boyutlandırılsın */
+
+/* Tur Özeti Kutusu */
+#tour-summary-box {
+    background-color: #f9f9f9;
+    border: 1px solid #e9e9e9;
+    border-radius: 8px;
+    padding: 20px;
+    position: sticky; /* Sayfa kaydırıldığında ekranda kalsın */
+    top: 20px;
+}
+#tour-summary-box h3 { margin-top: 0; }
+#tour-summary-box img { width: 100%; height: auto; border-radius: 5px; margin-bottom: 15px; }
+#tour-summary-box h4 { margin-bottom: 10px; }
+#tour-summary-box p { margin: 5px 0; }
+/* --- YENİ: ÇOK ADIMLI REZERVASYON FORMU STİLLERİ --- */
+
+.form-step {
+    display: none; /* Tüm adımları başlangıçta gizle */
+    animation: fadeIn 0.5s; /* Geçiş efekti */
+}
+
+.form-step.active {
+    display: block; /* Sadece aktif olan adımı göster */
+}
+
+.form-step h3 {
+    font-size: 24px;
+    color: #333;
+    margin-bottom: 25px;
+    border-bottom: 2px solid #eee;
+    padding-bottom: 10px;
+}
+
+/* "Geri" butonu için ikincil bir stil */
+.btn-secondary {
+    padding: 12px;
+    font-size: 16px;
+    background-color: #6c757d; /* Gri renk */
+    color: white;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    font-weight: bold;
+    transition: background-color 0.2s;
+    margin-right: 10px; /* Sağındaki butonla arasına boşluk koy */
+}
+.btn-secondary:hover {
+    background-color: #5a6268;
+}
+
+/* Onay ekranı stilleri */
+#confirmation-details {
+    background-color: #f9f9f9;
+    border-left: 5px solid #28a745; /* Yeşil vurgu */
+    padding: 25px;
+    border-radius: 8px;
+    margin-bottom: 20px;
+}
+#confirmation-details p {
+    line-height: 1.7;
+    margin-bottom: 15px;
+}
+#confirmation-details ul {
+    list-style-type: none;
+    padding: 0;
+}
+#confirmation-details ul li {
+    padding: 8px;
+    border-bottom: 1px solid #eee;
+}
+#confirmation-details ul li:last-child {
+    border-bottom: none;
+}
+
+/* Geçiş efekti için animasyon */
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+        transform: translateY(10px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+/* --- YENİ: HEADER MOBİL GÖRÜNÜM DÜZELTMELERİ --- */
+
+@media (max-width: 992px) {
+    /* Ekran 992px'den darsa... */
+
+    .main-header {
+        /* Header'ı dikey hale getir, elemanları alt alta diz */
+        flex-direction: column;
+        gap: 15px; /* Elemanlar arasına dikey boşluk ekle */
+        padding: 20px;
+    }
+
+    /* Sol ve sağ blokların mutlak konumlandırmasını iptal et */
+    .header-left, .auth-buttons {
+        position: static; /* Varsayılan konuma geri döndür */
+    }
+
+    /* Ortadaki menüyü gizle (mobil için hamburger menü daha iyi bir seçenek olurdu ama şimdilik böyle kalsın) */
+    .main-nav {
+        order: 3; /* En alta al */
+    }
+
+    .header-left { order: 1; }
+    .auth-buttons { order: 2; }
+
+    /* Butonları yan yana diz ve ortala */
+    .auth-buttons {
+        display: flex;
+        justify-content: center;
+        width: 100%;
+    }
+}
+/* --- YENİ: REZERVASYON EKRANI İNCE AYARLARI --- */
+
+/* Toplam Tutar Göstergesi */
+.total-price-display {
+    background-color: #e9f7ef;
+    border: 1px solid #a6dfbe;
+    color: #155724;
+    padding: 15px;
+    border-radius: 8px;
+    text-align: center;
+    font-size: 18px;
+    margin-bottom: 25px; /* Altındaki form elemanıyla arasını açar */
+}
+/* ADIM 1: Kişisel Bilgiler ekranındaki boşlukları düzenle */
+#step-1 .form-group {
+    margin-bottom: 20px; /* Her bir form grubu arasına boşluk koy */
+}
+#step-1 .form-group:last-of-type {
+    margin-bottom: 0; /* En son form grubunun altındaki boşluğu kaldır */
+}
+
+/* ADIM 2: Ödeme ekranındaki boşluk düzenlemesi (Bu zaten vardı) */
+#step-2 .form-group {
+    margin-bottom: 20px; /* Her bir form grubu arasına boşluk koy */
+}
+
+/* Adım 2'deki butonların olduğu alanı bir konteyner olarak ele alalım */
+/* HTML'de bir değişiklik yapmaya gerek yok, CSS ile halledebiliriz */
+
+/* Geri Butonu (Kırmızı Tonları) */
+.btn-secondary {
+    padding: 12px 25px; /* Yatay padding'i biraz artır */
+    font-size: 16px;
+    background-color: #dc3545; /* Kırmızı */
+    color: white;
+    border: gray;
+    margin-bottom: 10px;
+    border-radius: 5px;
+    cursor: pointer;
+    font-weight: bold;
+    transition: background-color 0.2s;
+}
+.btn-secondary:hover {
+    background-color: #c82333; /* Daha koyu kırmızı */
+}
+
+/* Ödeme Ekranı (Adı
+    border-radius: 5px;
+    cursor: pointer;
+    font-weigh
+    border-radius: 5px;
+    cursor: pointer;
+    font-weight: bold;
+    transition: background-color 0.2s;
+}
+.btn-seconbottom: 20px; /* Her bir form grubu arasına boşluk koy */
+}
+/* --- YENİ: HAKKIMIZDA SAYFASI STİLLERİ --- */
+
+/* Hero bölümü */
+.about-hero-section {
+    background: url('https://picsum.photos/1920/600?random=4') no-repeat center center/cover;
+    height: 40vh;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    color: white;
+    text-shadow: 2px 2px 8px rgba(0, 0, 0, 0.7);
+    margin-bottom: 40px;
+}
+/* --- GÜNCELLENMİŞ: HAKKIMIZDA SAYFASI STİLLERİ --- */
+
+/* Hero bölümü ve metin başlıklarını logonun rengine uygun hale getiriyoruz */
+.about-hero-section h1 {
+    font-size: 48px;
+    margin: 0;
+    color: #8B4513; /* LG logosunun kahve tonu */
+    text-shadow: none; /* Gölgeyi kaldırarak daha modern bir görünüm */
+}
+
+/* Sayfanın genel düzenini iyileştiren stil */
+.about-content-container {
+    max-width: 1200px; /* İçerik için maksimum genişlik */
+    margin: 0 auto;
+    padding: 0 20px;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 40px;
+    justify-content: space-between;
+    align-items: center;
+    position: relative; /* Arka planı konumlandırmak için ana taşıyıcı */
+}
+
+/* 50px girintili dış alan için hafif mavi arka plan */
+.about-content-container::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: -50px;
+    right: -50px;
+    bottom: 0;
+    background-color: #e0eaf0; /* Açık mavi tonu */
+    z-index: -1;
+    border-radius: 10px;
+}
+
+/* Başlıkları logonun kahve tonuna güncelliyoruz */
+.about-text-column h2 {
+    font-size: 32px;
+    color: #8B4513; /* LG logosunun kahve tonu */
+    border-bottom: 2px solid #ddd;
+    padding-bottom: 10px;
+    margin-bottom: 20px;
+}
+
+/* Metin ve diğer detaylar için orta kısımda daha koyu soluk mavi arka plan */
+.about-text-column,
+.about-image-slider {
+    background-color: #d1dde4; /* Koyu soluk mavi */
+    padding: 30px;
+    border-radius: 8px;
+    box-shadow: 0 8px 25px rgba(0, 0, 0, 0.08);
+}
+.about-text-column h2 {
+    margin-top: 0;
+}
+
+/* Mobil cihazlar için responsive ayarlar */
+@media (max-width: 768px) {
+    .about-content-container {
+        flex-direction: column;
+        gap: 20px;
+        padding: 0 10px; /* Mobil görünümde yan boşlukları azaltıyoruz */
+    }
+
+    /* Arka plan stilini mobil için güncelliyoruz */
+    .about-content-container::before {
+        left: 0;
+        right: 0;
+    }
+
+    .about-image-slider {
+        order: -1;
+        min-width: 100%;
+    }
+}
+
+.about-text-column {
+    flex: 1;
+    min-width: 300px; /* Metin alanının daralmasını engelle */
+}
+.about-text-full-width {
+    flex: 0 0 100%; /* Tam genişliği kapla */
+    margin-top: 20px;
+}
+.about-text-column h2 {
+    font-size: 32px;
+    color: #007BFF;
+    border-bottom: 2px solid #eee;
+    padding-bottom: 10px;
+    margin-bottom: 20px;
+}
+.about-text-column p {
+    font-size: 18px;
+    line-height: 1.8;
+    color: #555;
+}
+
+/* Slider alanı */
+.about-image-slider {
+    flex: 1;
+    min-width: 400px;
+    height: 350px;
+    position: relative;
+    box-shadow: 0 8px 25px rgba(0, 0, 0, 0.1);
+    border-radius: 8px;
+    overflow: hidden;
+}
+
+.slider-image {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    opacity: 0; /* Başlangıçta tüm görselleri gizle */
+    transition: opacity 1s ease-in-out; /* Yumuşak geçiş efekti */
+}
+.slider-image.active {
+    opacity: 1; /* Aktif olanı göster */
+}
+
+/* Mobil cihazlar için responsive ayarlar */
+@media (max-width: 768px) {
+    .about-content-container {
+        flex-direction: column;
+        gap: 20px;
+    }
+    .about-image-slider {
+        order: -1; /* Görseli metnin üzerine taşı */
+        min-width: 100%;
+    }
+}
+
+/* Language Switcher CSS */
+.language-menu-hidden {
+    display: none;
+}
+
+.language-menu-visible {
+    display: block;
+    position: absolute; /* Menüyü ana akışın dışına çıkarır */
+    top: 50px; /* Header'dan aşağıda konumlandırır */
+    left: 20px; /* Logo'nun altına hizalar */
+    background-color: #fff; /* Arka plan rengi */
+    border: 1px solid #ccc; /* Kenarlık ekler */
+    padding: 10px;
+    box-shadow: 0 4px 8px rgba(0,0,0,0.1); /* Hafif gölge ekler */
+    z-index: 1000; /* Diğer elemanların üstünde görünmesini sağlar */
+}
+
+.language-menu-visible a {
+    display: block;
+    padding: 5px 0;
+    text-decoration: none;
+    color: #333;
+}
+
+.language-menu-visible a:hover {
+    color: #007bff;
+}
+/* Logo resmi için boyutlandırma */
+.logo a img {
+    height: auto;
+    max-height: 100px; /* Logonun maksimum yüksekliği */
+    max-width: 160%; /* Kapsayıcıya sığmasını sağlar */
+    display: block; /* Gereksiz boşlukları engeller */
+}
+
+/* Logo kapsayıcısı */
+.logo a {
+    display: flex; /* İçindeki resmi dikeyde ortalamak için */
+    align-items: center; /* Dikeyde ortalar */
+    justify-content: center; /* Yatayda ortalar */
+}
+
+/* HERO autocomplete */
+.search-panel { position: relative; }
+.autocomplete-list{
+  position:absolute; left:0; right:0; top:100%; margin-top:6px;
+  background:#fff; border:1px solid #ddd; border-radius:8px;
+  box-shadow:0 6px 18px rgba(0,0,0,.08); max-height:300px; overflow:auto; z-index:1000;
+}
+.autocomplete-item{
+  display:flex; justify-content:space-between; align-items:center;
+  gap:12px; padding:10px 12px; cursor:pointer;
+}
+.autocomplete-item:hover{ background:#f6f8fa; }
+.tour-name{ font-weight:600; color:#222; }
+.tour-badge{
+  font-size:12px; padding:4px 8px; border-radius:999px; font-weight:700;
+  background:#eef2ff; color:#3730a3;
+}
+.tour-badge.outbound{ background:#e6fffb; color:#065f46; } /* yurt dışı */             
+
+/* ---- Auth forms ---- */
+.auth-form { max-width: 420px; margin: 40px auto; background:#fff; padding:24px; border-radius:12px; box-shadow:0 10px 30px rgba(0,0,0,.06); }
+.auth-form h1 { font-size:22px; margin:0 0 12px; }
+.auth-form p.subtitle { color:#666; margin:0 0 16px; }
+
+.auth-field { margin-bottom:14px; }
+.auth-field label { display:block; font-weight:600; margin-bottom:6px; }
+.auth-input { width:100%; padding:10px 12px; border:1px solid #ddd; border-radius:8px; outline:0; }
+.auth-input:focus { border-color:#6aa1ff; box-shadow:0 0 0 3px rgba(106,161,255,.15); }
+
+.auth-row { display:flex; gap:10px; }
+.auth-row > * { flex:1; }
+
+.password-wrap { position:relative; }
+.password-toggle {
+  position:absolute; right:10px; top:50%; transform:translateY(-50%);
+  border:0; background:transparent; cursor:pointer; font-size:13px; color:#555;
+}
+
+.auth-error { color:#b42318; font-size:13px; margin-top:6px; display:none; }
+.auth-error.is-visible { display:block; }
+
+.auth-hint { font-size:12px; color:#666; margin-top:6px; }
+
+.strength { height:6px; background:#eee; border-radius:999px; overflow:hidden; margin-top:6px; }
+.strength > i { display:block; height:100%; width:0%; background:#f87171; transition:width .25s; }
+.strength[data-level="2"] > i { width:40%; background:#fb923c; }
+.strength[data-level="3"] > i { width:70%; background:#fbbf24; }
+.strength[data-level="4"] > i { width:100%; background:#22c55e; }
+
+.auth-actions { margin-top:18px; }
+.auth-btn { width:100%; padding:12px; background:#0d6efd; color:#fff; border:0; border-radius:10px; font-weight:700; cursor:pointer; }
+.auth-btn:disabled { opacity:.6; cursor:not-allowed; }           
+
+/* ---- Forgot Password ---- */
+.auth-link-row { display:flex; justify-content:space-between; align-items:center; margin-top:10px; }
+.auth-link-row a { font-size:13px; text-decoration:underline; color:#0d6efd; }
+
+.fp-modal-backdrop{
+  position:fixed; inset:0; background:rgba(0,0,0,.45);
+  display:none; align-items:center; justify-content:center; z-index:1000;
+}
+.fp-modal{ background:#fff; width:min(420px, 92vw); border-radius:12px; padding:20px; box-shadow:0 10px 30px rgba(0,0,0,.2); }
+.fp-modal h2{ font-size:18px; margin:0 0 8px; }
+.fp-actions{ display:flex; gap:10px; margin-top:14px; }
+.fp-actions .btn{ flex:1; padding:10px; border-radius:10px; border:0; cursor:pointer; font-weight:700; }
+.fp-actions .btn.primary{ background:#0d6efd; color:#fff; }
+.fp-actions .btn.ghost{ background:#f3f4f6; color:#111827; }
+.fp-msg{ font-size:13px; color:#16a34a; display:none; margin-top:8px; }
+.fp-error{ font-size:13px; color:#b42318; display:none; margin-top:6px; }
+.fp-visible{ display:flex; }
+
+/* ---- KVKK / Şartlar + Confirm Password ---- */
+.auth-consent { display:flex; gap:8px; align-items:flex-start; margin-top:8px; }
+.auth-consent input { margin-top:3px; }
+.auth-consent label { font-size:13px; color:#444; }
+.auth-consent a { color:#0d6efd; text-decoration:underline; }
+
+.auth-error { color:#b42318; font-size:13px; margin-top:6px; display:none; }
+.auth-error.is-visible { display:block; }
+/* --- Kayıt: e‑posta + şifre gücü --- */
+.auth-hint { font-size:12px; color:#6b7280; margin-top:4px; }
+.auth-error { color:#b42318; font-size:12px; margin-top:6px; display:none; }
+.auth-error.is-visible { display:block; }
+
+/* Şifre gücü çubuğu */
+.pass-strength { margin-top:8px; height:8px; background:#e5e7eb; border-radius:999px; overflow:hidden; }
+.pass-strength > span { display:block; height:100%; width:0%; background:#ef4444; transition:width .25s ease, background .25s ease; }
+.pass-strength-msg { font-size:12px; margin-top:6px; color:#374151; }
+.password-wrap {
+  position: relative;
+}
+.password-wrap .auth-input {
+  padding-right: 44px; /* ikon için sağ boşluk */
+}
+.pw-toggle {
+  position: absolute;
+  right: 10px;
+  top: 50%;
+  transform: translateY(-50%);
+  height: 100%;
+  display: flex;
+  align-items: center;
+  border: 0;
+  background: transparent;
+  cursor: pointer;
+  padding: 0 6px;
+}
+.pw-toggle i {
+  font-size: 18px;
+  opacity: .75;
+}
+.pw-toggle:hover i {
+  opacity: 1;
+}

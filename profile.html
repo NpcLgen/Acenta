@@ -1,0 +1,686 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Profilim</title>
+
+  <!-- Site genel stili -->
+  <link rel="stylesheet" href="style.css"/>
+
+  <!-- İkonlar -->
+  <link rel="stylesheet"
+        href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css"/>
+
+  <style>
+      
+      /* Header'ın sağ tarafı için genel düzen */
+.header-right {
+    display: flex;
+    align-items: center; /* Dikey olarak ortalar */
+    margin-left: center; /* Navigasyon menüsünden ayırır, sağa yaslar */
+}
+
+/* Her iki menüyü kapsayan div için stil */
+.menu-container {
+    position: relative; /* İçindeki menüleri konumlandırmak için */
+    margin-left: 10px; /* Menüler arasında boşluk bırakır */
+}
+
+/* Her iki menü butonu (toggle) için ortak stil */
+.menu-toggle {
+    padding: 8px 12px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+}
+
+.menu-toggle i {
+    font-size: 14px;
+    color: #333;
+}
+
+.menu-toggle:hover {
+    background-color: #f0f0f0;
+}
+
+/* Her iki menü içeriği için ortak stil */
+.menu-content {
+    display: flex;
+    flex-direction: column;
+    position: absolute;
+    top: 100%;
+    right: 0; /* Menüyü sağa hizalar */
+    background-color: #fff;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    z-index: 999;
+    
+    /* Başlangıç durumu (gizli) */
+    opacity: 0;
+    visibility: hidden;
+    transform: translateY(-10px);
+    transition: opacity 0.3s ease, transform 0.3s ease, visibility 0s 0.3s;
+}
+
+/* Menü açıldığında uygulanacak stil */
+.menu-content.is-active {
+    opacity: 1;
+    visibility: visible;
+    transform: translateY(0);
+    transition: opacity 0.3s ease, transform 0.3s ease;
+}
+
+.menu-content a {
+    padding: 10px 15px;
+    text-decoration: none;
+    color: #333;
+    white-space: nowrap;
+    border-bottom: 1px solid #eee;
+}
+
+.menu-content a:last-child {
+    border-bottom: none;
+}
+
+.menu-content a:hover {
+    background-color: #f0f0f0;
+}
+      
+    :root{
+      /* Düzenlenebilir parametreler */
+      --profile-maxw: 1100px;     /* Orta alanın toplam maksimum genişliği */
+      --sidebar-w: 260px;         /* Sol panel genişliği */
+      --sidebar-bg: #f4efe6;      /* Sol panel (bej ton) */
+      --sidebar-accent: #e9e1d4;  /* Hover/aktif ton */
+      --card-bg: #ffffff;         /* İçerik kartları */
+      --card-radius: 14px;
+      --gap: 18px;
+    }
+
+    body{background:#fafafa}
+
+    /* Sayfa kapsayıcı */
+    .profile-shell{
+      max-width: var(--profile-maxw);
+      margin: 36px auto;
+      padding: 0 16px;
+      display: grid;
+      grid-template-columns: var(--sidebar-w) 1fr;
+      gap: var(--gap);
+    }
+
+    /* Sol menü */
+    .profile-sidebar{
+      background: var(--sidebar-bg);
+      border-radius: var(--card-radius);
+      padding: 18px 14px;
+      display: flex;
+      flex-direction: column;
+    }
+
+    /* Avatar bloğu */
+    .avatar-block{
+      display:flex;
+      flex-direction: column;
+      align-items:center;
+      padding: 6px 6px 14px;
+      border-bottom: 1px dashed #d8cfbf;
+      margin-bottom: 12px;
+    }
+    .avatar{
+      width: 120px; height: 120px;
+      border-radius: 50%;
+      background:#fff;
+      border: 3px solid #e6dcc9;
+      overflow:hidden;
+      display:grid; place-items:center;
+      position: relative;
+    }
+    .avatar img{width:100%; height:100%; object-fit:cover}
+    .avatar .avatar-initials{
+      font-weight:800; color:#8b7355; font-size: 40px;
+    }
+    .avatar-actions{
+      display:flex; gap:8px; margin-top:10px;
+    }
+    .btn{border:1px solid #d7cfbe; background:#fff; padding:8px 10px; border-radius:10px; cursor:pointer; font-size:14px}
+    .btn:hover{background:#f8f5ef}
+    .btn-danger{border-color:#dba9a9; color:#a62121; background:#fffafa}
+    .btn-danger:hover{background:#ffefef}
+
+    /* Menü butonları */
+    .side-menu{margin-top: 8px; display:flex; flex-direction: column; gap: 6px;}
+    .side-link{
+      display:flex; align-items:center; gap:10px;
+      padding:10px 12px; border-radius:10px; cursor:pointer;
+      color:#3a2f22; text-decoration:none; user-select:none;
+    }
+    .side-link:hover{ background: var(--sidebar-accent); }
+    .side-link.is-active{ background: var(--sidebar-accent); font-weight:700; }
+
+    /* Sağ içerik */
+    .profile-content{
+      background: var(--card-bg);
+      border-radius: var(--card-radius);
+      box-shadow: 0 8px 30px rgba(0,0,0,.06);
+      padding: 20px;
+      min-height: 480px;
+    }
+    .content-header{
+      display:flex; align-items:center; justify-content:space-between;
+      margin-bottom: 14px;
+    }
+    .content-title{ font-size: 20px; font-weight: 800; }
+
+    .field{
+      margin-bottom: 12px;
+    }
+    .field label{display:block; font-weight:600; margin-bottom: 6px}
+    .input{width:80%; padding: 10px 12px; border:1px solid #ddd; border-radius:10px; font-size: 15px}
+    .input:focus{outline:none; border-color:#c8bda9; box-shadow: 0 0 0 3px rgba(200,189,169,.25)}
+    .row{display:grid; grid-template-columns: 1fr 1fr; gap: 12px}
+    .actions{margin-top: 10px; display:flex; gap:10px}
+    .btn-primary{background:#0d6efd; border-color:#0d6efd; color:#fff}
+    .btn-primary:hover{filter: brightness(.96)}
+    .muted{color:#7b7b7b; font-size: 13px}
+
+    /* Basit liste görünümleri */
+    .list{display:flex; flex-direction:column; gap:10px; margin-top:8px}
+    .list-item{
+      border:1px solid #eee; border-radius:10px; padding:12px;
+      display:flex; justify-content:space-between; align-items:center;
+    }
+
+    @media (max-width: 960px){
+      .profile-shell{
+        grid-template-columns: 1fr;
+      }
+      .profile-sidebar{order: 2}
+      .profile-content{order: 1}
+    }
+  </style>
+</head>
+<body>
+
+  
+<header class="main-header">
+    <div class="header-left">
+        <div class="logo"><a href="index.html">LG</a></div>
+    </div>
+    <nav class="main-nav">
+        <ul>
+            <li><a href="index.html" data-i18n="nav-home">Ana Sayfa</a></li>
+            <li><a href="turlar.html" data-i18n="nav-tours">Turlar</a></li>
+            <li><a href="aktiviteler.html" data-i18n="nav-activities">Aktiviteler</a></li>
+            <li><a href="harita.html" data-i18n="nav-map">Harita</a></li>
+            <li><a href="hakkimizda.html" data-i18n="nav-about">Hakkımızda</a></li>
+            <li><a href="iletisim.html" data-i18n="nav-contact">İletişim</a></li>
+        </ul>
+    </nav>
+    <div class="header-right">
+        <div id="language-menu-container" class="menu-container">
+            <div class="menu-toggle" id="language-menu-toggle">
+                <i class="fas fa-globe"></i>
+            </div>
+            <div class="menu-content" id="language-menu-content">
+                <a href="#" class="lang-option" data-lang="tr">Türkçe</a>
+                <a href="#" class="lang-option" data-lang="en">English</a>
+                <a href="#" class="lang-option" data-lang="de">Deutsch</a>
+            </div>
+        </div>
+
+        <div id="auth-menu-container" class="menu-container">
+            <div class="menu-toggle" id="hamburger-menu-toggle">
+                <i class="fas fa-bars"></i>
+            </div>
+            <div class="menu-content" id="hamburger-menu-content">
+                <a href="giris.html" class="btn-login" data-i18n="auth-login">Giriş Yap</a>
+                <a href="kayit.html" class="btn-register" data-i18n="auth-register">Kayıt Ol</a>
+            </div>
+        </div>
+    </div>
+</header>
+
+
+  <!-- ======= PROFİL SAYFASI İÇERİĞİ (mevcut çalışan kodun yapısı) ======= -->
+  <main>
+    <div class="profile-shell">
+      <!-- SOL: Avatar + Menü -->
+      <aside class="profile-sidebar">
+        <div class="avatar-block">
+          <div class="avatar" id="avatarBox">
+            <span class="avatar-initials" id="avatarInitials">LG</span>
+            <img id="avatarImg" alt="Profil" style="display:none"/>
+          </div>
+          <div class="avatar-actions">
+            <button class="btn" id="btnPick"><i class="fa-solid fa-image"></i> Foto Seç</button>
+            <button class="btn-danger" id="btnRemove"><i class="fa-solid fa-trash"></i> Kaldır</button>
+          </div>
+          <input type="file" id="avatarInput" accept="image/*" hidden>
+        </div>
+
+        <nav class="side-menu" id="sideMenu">
+          <a class="side-link is-active" data-panel="profilim"><i class="fa-solid fa-user"></i> Profilim</a>
+          <a class="side-link" data-panel="kisisel"><i class="fa-solid fa-id-card"></i> Kişisel Bilgilerim</a>
+          <a class="side-link" data-panel="rezervasyon"><i class="fa-solid fa-suitcase-rolling"></i> Rezervasyonlarım</a>
+          <a class="side-link" data-panel="gezdiklerim"><i class="fa-solid fa-location-dot"></i> Gezdiğim Yerler</a>
+          <a class="side-link" data-panel="favoriler"><i class="fa-solid fa-heart"></i> Favorilerim</a>
+          <a class="side-link" data-panel="hedefler"><i class="fa-solid fa-bullseye"></i> Hedeflerim</a>
+        </nav>
+      </aside>
+
+      <!-- SAĞ: İçerik -->
+      <section class="profile-content">
+        <div class="content-header">
+          <div class="content-title" id="contentTitle">Profilim</div>
+        </div>
+        <div id="contentBody">
+          <!-- Varsayılan içerik (Profilim) -->
+          <div class="card">
+            <p class="muted">Hoş geldin, <span id="helloName">Misafir</span>! Bu alanda genel profil özetin yer alır.</p>
+            <div class="row" style="margin-top:10px">
+              <div class="field">
+                <label>Ad Soyad</label>
+                <input class="input" id="p_name" disabled>
+              </div>
+              <div class="field">
+                <label>E‑posta</label>
+                <input class="input" id="p_email" disabled>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+    </div>
+  </main>
+
+  <!-- ======= Genel Site Footer’ı ======= -->
+  <footer class="main-footer-section">
+    <div class="footer-container">
+      <div class="footer-column">
+        <h3 data-i18n="footer-title">LG Turizm</h3>
+        <p data-i18n="footer-about">İki kardeşin seyahat tutkusundan doğan acentamızla, dünyanın dört bir yanındaki maceralara sizi de bekliyoruz. Unutulmaz anılar biriktirmek için doğru adrestesiniz.</p>
+      </div>
+      <div class="footer-column">
+        <h4 data-i18n="footer-links-title">Hızlı Linkler</h4>
+        <ul>
+          <li><a href="index.html" data-i18n="nav-home">Ana Sayfa</a></li>
+          <li><a href="turlar.html" data-i18n="nav-tours">Turlar</a></li>
+          <li><a href="aktiviteler.html" data-i18n="nav-activities">Aktiviteler</a></li>
+          <li><a href="hakkimizda.html" data-i18n="nav-about">Hakkımızda</a></li>
+          <li><a href="iletisim.html" data-i18n="nav-contact">İletişim</a></li>
+        </ul>
+      </div>
+      <div class="footer-column">
+        <h4 data-i18n="footer-contact-title">İletişim</h4>
+        <p data-i18n="footer-address">📍 Adres: Örnek Mah. Gezgin Sok. No:12/3 Kadıköy, İstanbul</p>
+        <p data-i18n="footer-phone">📞 Telefon: +90 555 123 45 67</p>
+        <p data-i18n="footer-email">✉️ E-posta: bilgi@lgturizm.com</p>
+      </div>
+      <div class="footer-column">
+        <h4 data-i18n="footer-social-title">Bizi Takip Edin</h4>
+        <div class="social-icons">
+          <a href="#" aria-label="Facebook">FB</a>
+          <a href="#" aria-label="Instagram">IG</a>
+          <a href="#" aria-label="Twitter">TW</a>
+          <a href="#" aria-label="YouTube">YT</a>
+        </div>
+      </div>
+    </div>
+    <div class="footer-bottom">
+      <p data-i18n="footer-copyright">&copy; 2025 LG Turizm. Tüm Hakları Saklıdır.</p>
+    </div>
+  </footer>
+
+  <!-- ======= Header menüleri (dil & hamburger) için minik JS ======= -->
+  <script>
+    document.addEventListener('DOMContentLoaded', function () {
+      // Dropdown menüler
+      const allMenuToggles = document.querySelectorAll('.menu-toggle');
+      const allMenuContents = document.querySelectorAll('.menu-content');
+
+      allMenuToggles.forEach(t => {
+        t.addEventListener('click', function(e){
+          e.stopPropagation();
+          const id = this.id.replace('-toggle','-content');
+          const target = document.getElementById(id);
+          allMenuContents.forEach(m => { if(m.id !== id) m.classList.remove('is-active'); });
+          target.classList.toggle('is-active');
+        });
+      });
+      document.addEventListener('click', () => allMenuContents.forEach(m => m.classList.remove('is-active')));
+      allMenuContents.forEach(m => m.addEventListener('click', e => e.stopPropagation()));
+
+      // Basit i18n (sayfadaki data-i18n alanlarını doldurur)
+      const translations = {
+        tr:{'nav-home':'Ana Sayfa','nav-tours':'Turlar','nav-activities':'Aktiviteler','nav-map':'Harita','nav-about':'Hakkımızda','nav-contact':'İletişim','auth-login':'Giriş Yap','auth-register':'Kayıt Ol','footer-title':'LG Turizm','footer-links-title':'Hızlı Linkler','footer-contact-title':'İletişim','footer-social-title':'Bizi Takip Edin','footer-about':'İki kardeşin seyahat tutkusundan doğan acentamızla, dünyanın dört bir yanındaki maceralara sizi de bekliyoruz. Unutulmaz anılar biriktirmek için doğru adrestesiniz.','footer-address':'📍 Adres: Örnek Mah. Gezgin Sok. No:12/3 Kadıköy, İstanbul','footer-phone':'📞 Telefon: +90 555 123 45 67','footer-email':'✉️ E-posta: bilgi@lgturizm.com','footer-copyright':'© 2025 LG Turizm. Tüm Hakları Saklıdır.'},
+        en:{'nav-home':'Homepage','nav-tours':'Tours','nav-activities':'Activities','nav-map':'Map','nav-about':'About Us','nav-contact':'Contact','auth-login':'Login','auth-register':'Register','footer-title':'LG Tourism','footer-links-title':'Quick Links','footer-contact-title':'Contact','footer-social-title':'Follow Us','footer-about':'With our agency born from the passion for travel of two brothers, we welcome you to adventures all over the world. You are at the right place to collect unforgettable memories.','footer-address':'📍 Address: Sample Dist. Gezgin St. No:12/3 Kadıköy, Istanbul','footer-phone':'📞 Phone: +90 555 123 45 67','footer-email':'✉️ Email: bilgi@lgturizm.com','footer-copyright':'© 2025 LG Tourism. All Rights Reserved.'},
+        de:{'nav-home':'Startseite','nav-tours':'Touren','nav-activities':'Aktivitäten','nav-map':'Karte','nav-about':'Über uns','nav-contact':'Kontakt','auth-login':'Anmelden','auth-register':'Registrieren','footer-title':'LG Tourismus','footer-links-title':'Schnell-Links','footer-contact-title':'Kontakt','footer-social-title':'Folgen Sie uns','footer-about':'Mit unserer Agentur, die aus der Leidenschaft von zwei Brüdern für das Reisen entstanden ist, heißen wir Sie zu Abenteuern auf der ganzen Welt willkommen.','footer-address':'📍 Adresse: Muster. Gezgin Str. Nr.12/3 Kadıköy, Istanbul','footer-phone':'📞 Telefon: +90 555 123 45 67','footer-email':'✉️ E‑Mail: bilgi@lgturizm.com','footer-copyright':'© 2025 LG Tourismus. Alle Rechte vorbehalten.'},
+      };
+      function setLanguage(lang){
+        document.querySelectorAll('[data-i18n]').forEach(el=>{
+          const k = el.getAttribute('data-i18n');
+          if (translations[lang] && translations[lang][k]){
+            if(el.tagName==='INPUT' && el.hasAttribute('placeholder')) el.setAttribute('placeholder', translations[lang][k]);
+            else el.innerHTML = translations[lang][k];
+          }
+        });
+        localStorage.setItem('selectedLang',lang);
+        document.documentElement.lang = lang;
+      }
+      document.querySelectorAll('.lang-option').forEach(o=>{
+        o.addEventListener('click', function(e){
+          e.preventDefault();
+          setLanguage(this.dataset.lang);
+          document.getElementById('language-menu-content')?.classList.remove('is-active');
+        });
+      });
+      setLanguage(localStorage.getItem('selectedLang') || 'tr');
+    });
+  </script>
+
+  <!-- ======= (MEVCUT SİTE) Auth durumunu yöneten JS ======= -->
+  <script src="main-auth.js"></script>
+
+  <!-- ======= PROFİL SAYFASININ KENDİ ÇALIŞAN JS’İ (aynen korunmuştur) ======= -->
+  <script>
+  (function(){
+    // Basit yardımcılar
+    const $ = (sel, ctx=document) => ctx.querySelector(sel);
+    const $$ = (sel, ctx=document) => Array.from(ctx.querySelectorAll(sel));
+
+    // Oturum kontrolü
+    const loggedInUser = JSON.parse(localStorage.getItem('loggedInUser') || 'null');
+    if (!loggedInUser){
+      // Giriş yapılmadıysa giriş sayfasına gönder
+      window.location.href = 'giris.html';
+      return;
+    }
+
+    // Kullanıcı dizininde güncelleme yardımcıları
+    function getUsers(){
+      try { return JSON.parse(localStorage.getItem('users')||'[]'); } catch(e){ return []; }
+    }
+    function setUsers(arr){
+      localStorage.setItem('users', JSON.stringify(arr));
+    }
+    function updateUser(mapper){
+      const users = getUsers();
+      const idx = users.findIndex(u => u.email === loggedInUser.email);
+      if (idx>-1){
+        users[idx] = mapper(users[idx]);
+        setUsers(users);
+        if (users[idx].email === loggedInUser.email){
+          localStorage.setItem('loggedInUser', JSON.stringify(users[idx]));
+        }
+      }
+    }
+
+    /* -------- Avatar işlemleri -------- */
+    const avatarImg = $('#avatarImg');
+    const avatarInitials = $('#avatarInitials');
+    const avatarInput = $('#avatarInput');
+    const btnPick = $('#btnPick');
+    const btnRemove = $('#btnRemove');
+
+    function initialsOf(user){
+      const n = [user.name||'', user.surname||''].join(' ').trim();
+      if (!n) return 'U';
+      const parts = n.split(/\s+/).filter(Boolean);
+      const first = (parts[0][0]||'').toUpperCase();
+      const last  = (parts.at(-1)[0]||'').toUpperCase();
+      return first + last;
+    }
+
+    function renderAvatar(){
+      const avatar = loggedInUser.avatarDataUrl;
+      if (avatar){
+        avatarImg.src = avatar;
+        avatarImg.style.display = 'block';
+        avatarInitials.style.display = 'none';
+      } else {
+        avatarImg.style.display = 'none';
+        avatarInitials.style.display = 'grid';
+        avatarInitials.textContent = initialsOf(loggedInUser);
+      }
+    }
+
+    btnPick.addEventListener('click', ()=> avatarInput.click());
+    avatarInput.addEventListener('change', ()=>{
+      const file = avatarInput.files && avatarInput.files[0];
+      if (!file) return;
+      const reader = new FileReader();
+      reader.onload = () => {
+        const dataUrl = reader.result;
+        // kullanıcı objesine yaz
+        loggedInUser.avatarDataUrl = dataUrl;
+        localStorage.setItem('loggedInUser', JSON.stringify(loggedInUser));
+        updateUser(u => (u.email===loggedInUser.email? {...u, avatarDataUrl: dataUrl }:u));
+        renderAvatar();
+      };
+      reader.readAsDataURL(file);
+      avatarInput.value = '';
+    });
+
+    btnRemove.addEventListener('click', ()=>{
+      delete loggedInUser.avatarDataUrl;
+      localStorage.setItem('loggedInUser', JSON.stringify(loggedInUser));
+      updateUser(u => {
+        if (u.email===loggedInUser.email){
+          const {avatarDataUrl, ...rest} = u;
+          return rest;
+        }
+        return u;
+      });
+      renderAvatar();
+    });
+
+    /* -------- Sol menü navigasyon -------- */
+    const panels = {
+      profilim(){
+        $('#contentTitle').textContent = 'Profilim';
+        $('#contentBody').innerHTML = `
+          <div class="card">
+            <p class="muted">Hoş geldin, <b>${escapeHtml((loggedInUser.name||'')+' '+(loggedInUser.surname||''))}</b>! Bu alanda genel profil özetin yer alır.</p>
+            <div class="row" style="margin-top:10px">
+              <div class="field">
+                <label>Ad Soyad</label>
+                <input class="input" value="${escapeHtml((loggedInUser.name||'')+' '+(loggedInUser.surname||''))}" disabled>
+              </div>
+              <div class="field">
+                <label>E‑posta</label>
+                <input class="input" value="${escapeHtml(loggedInUser.email||'')}" disabled>
+              </div>
+            </div>
+          </div>
+        `;
+      },
+      kisisel(){
+        $('#contentTitle').textContent = 'Kişisel Bilgilerim';
+        $('#contentBody').innerHTML = `
+          <div class="row">
+            <div class="field">
+              <label>Ad</label>
+              <input class="input" id="f_name" value="${escapeHtml(loggedInUser.name||'')}">
+            </div>
+            <div class="field">
+              <label>Soyad</label>
+              <input class="input" id="f_surname" value="${escapeHtml(loggedInUser.surname||'')}">
+            </div>
+          </div>
+          <div class="row">
+            <div class="field">
+              <label>Telefon</label>
+              <input class="input" id="f_phone" value="${escapeHtml(loggedInUser.phone||'')}">
+            </div>
+            <div class="field">
+              <label>Doğum Tarihi</label>
+              <input type="date" class="input" id="f_birth" value="${escapeHtml(loggedInUser.birth||'')}">
+            </div>
+          </div>
+          <div class="field">
+            <label>Hakkımda</label>
+            <textarea class="input" id="f_about" rows="4" style="resize:vertical">${escapeHtml(loggedInUser.about||'')}</textarea>
+          </div>
+          <div class="actions">
+            <button class="btn btn-primary" id="btnSaveInfo"><i class="fa-solid fa-floppy-disk"></i> Kaydet</button>
+            <span class="muted" id="saveInfoMsg"></span>
+          </div>
+        `;
+        $('#btnSaveInfo').addEventListener('click', ()=>{
+          const newUser = {
+            ...loggedInUser,
+            name: $('#f_name').value.trim(),
+            surname: $('#f_surname').value.trim(),
+            phone: $('#f_phone').value.trim(),
+            birth: $('#f_birth').value,
+            about: $('#f_about').value.trim(),
+          };
+          localStorage.setItem('loggedInUser', JSON.stringify(newUser));
+          updateUser(()=>newUser);
+          $('#saveInfoMsg').textContent = 'Bilgiler kaydedildi.';
+          setTimeout(()=> $('#saveInfoMsg').textContent='', 1500);
+        });
+      },
+      rezervasyon(){
+        $('#contentTitle').textContent = 'Rezervasyonlarım';
+        const key = `reservations:${loggedInUser.email}`;
+        const items = safeJson(localStorage.getItem(key)) || [];
+        $('#contentBody').innerHTML = `
+          <div class="muted">Toplam ${items.length} rezervasyon bulundu.</div>
+          <div class="list" id="rezList">
+            ${items.map((r,i)=>`
+              <div class="list-item">
+                <div>
+                  <div><b>${escapeHtml(r.title||'Tur')}</b></div>
+                  <div class="muted">${escapeHtml(r.date||'')}${r.pax?` • ${r.pax} kişi`:''}</div>
+                </div>
+                <button class="btn btn-danger" data-i="${i}"><i class="fa-solid fa-xmark"></i> Sil</button>
+              </div>
+            `).join('')}
+          </div>
+        `;
+        $$('#rezList .btn-danger').forEach(btn=>{
+          btn.addEventListener('click', ()=>{
+            const i = +btn.dataset.i;
+            items.splice(i,1);
+            localStorage.setItem(key, JSON.stringify(items));
+            panels.rezervasyon();
+          });
+        });
+      },
+      gezdiklerim(){
+        $('#contentTitle').textContent = 'Gezdiğim Yerler';
+        const key = `visited:${loggedInUser.email}`;
+        const items = safeJson(localStorage.getItem(key)) || [];
+        $('#contentBody').innerHTML = `
+          <div class="muted">Toplam ${items.length} yer işaretlendi.</div>
+          <div class="list" id="visitedList">
+            ${items.map((t,i)=>`
+              <div class="list-item">
+                <div><b>${escapeHtml(t.name||'Yer')}</b> <span class="muted">${escapeHtml(t.date||'')}</span></div>
+                <button class="btn btn-danger" data-i="${i}"><i class="fa-solid fa-xmark"></i> Kaldır</button>
+              </div>
+            `).join('')}
+          </div>
+        `;
+        $$('#visitedList .btn-danger').forEach(btn=>{
+          btn.addEventListener('click', ()=>{
+            const i = +btn.dataset.i;
+            items.splice(i,1);
+            localStorage.setItem(key, JSON.stringify(items));
+            panels.gezdiklerim();
+          });
+        });
+      },
+      favoriler(){
+        $('#contentTitle').textContent = 'Favorilerim';
+        const key = `favs:${loggedInUser.email}`;
+        const items = safeJson(localStorage.getItem(key)) || [];
+        $('#contentBody').innerHTML = `
+          <div class="muted">Toplam ${items.length} favori var.</div>
+          <div class="list" id="favList">
+            ${items.map((f,i)=>`
+              <div class="list-item">
+                <div><b>${escapeHtml(f.name||'Tur')}</b> <span class="muted">${escapeHtml(f.region||'')}</span></div>
+                <button class="btn btn-danger" data-i="${i}"><i class="fa-solid fa-xmark"></i> Sil</button>
+              </div>
+            `).join('')}
+          </div>
+        `;
+        $$('#favList .btn-danger').forEach(btn=>{
+          btn.addEventListener('click', ()=>{
+            const i = +btn.dataset.i;
+            items.splice(i,1);
+            localStorage.setItem(key, JSON.stringify(items));
+            panels.favoriler();
+          });
+        });
+      },
+      hedefler(){
+        $('#contentTitle').textContent = 'Hedeflerim';
+        const key = `goals:${loggedInUser.email}`;
+        const items = safeJson(localStorage.getItem(key)) || [];
+        $('#contentBody').innerHTML = `
+          <div class="field">
+            <label>Yeni hedef ekle</label>
+            <div class="actions">
+              <input class="input" id="goalText" placeholder="Örn: 2025 yazında İtalya">
+              <button class="btn btn-primary" id="goalAdd"><i class="fa-solid fa-plus"></i> Ekle</button>
+            </div>
+          </div>
+          <div class="list" id="goalList">
+            ${items.map((g,i)=>`
+              <div class="list-item">
+                <div>${escapeHtml(g.text)}</div>
+                <button class="btn btn-danger" data-i="${i}"><i class="fa-solid fa-xmark"></i> Sil</button>
+              </div>
+            `).join('')}
+          </div>
+        `;
+        $('#goalAdd').addEventListener('click', ()=>{
+          const txt = ($('#goalText').value||'').trim();
+          if(!txt) return;
+          items.push({text:txt, ts: Date.now()});
+          localStorage.setItem(key, JSON.stringify(items));
+          panels.hedefler();
+        });
+        $$('#goalList .btn-danger').forEach(btn=>{
+          btn.addEventListener('click', ()=>{
+            const i = +btn.dataset.i;
+            items.splice(i,1);
+            localStorage.setItem(key, JSON.stringify(items));
+            panels.hedefler();
+          });
+        });
+      }
+    };
+
+    // Sol menü tıklamaları
+    $$('#sideMenu .side-link').forEach(link=>{
+      link.addEventListener('click', ()=>{
+        $$('#sideMenu .side-link').forEach(l=> l.classList.remove('is-active'));
+        link.classList.add('is-active');
+        const p = link.dataset.panel;
+        panels[p]?.();
+      });
+    });
+
+    // Varsayılan ekranı yükle & avatarı çiz
+    $('#helloName').textContent = [(loggedInUser.name||''),(loggedInUser.surname||'')].join(' ').trim() || 'Misafir';
+    $('#p_name').value = [(loggedInUser.name||''),(loggedInUser.surname||'')].join(' ').trim();
+    $('#p_email').value = (loggedInUser.email||'');
+    renderAvatar();
+
+    // Yardımcılar
+    function escapeHtml(s=''){
+      return s.replace(/[&<>"']/g, c=>({ '&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;' }[c]));
+    }
+    function safeJson(s){ try{return JSON.parse(s)}catch(e){return null} }
+  })();
+  </script>
+</body>
+</html>

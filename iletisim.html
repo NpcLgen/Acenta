@@ -1,0 +1,481 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title data-i18n="page-title">İletişim - Acenta Sitem</title>
+    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" integrity="sha512-9usAa10IRO0HhonpyAIVpjrylPvoDwiPUiKdWk5t3PyolY1cOd4DSE0Ga+ri4AuTroPR5aQvXU9xC6qOPnzFeg==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+    
+    <style>
+        /* Dropdown menüleri için gerekli CSS */
+        .header-right {
+            display: flex;
+            align-items: center;
+            margin-left: center;
+        }
+
+        .menu-container {
+            position: relative;
+            margin-left: 10px;
+        }
+
+        .menu-toggle {
+            padding: 8px 12px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+        }
+
+        .menu-toggle i {
+            font-size: 14px;
+            color: #333;
+        }
+
+        .menu-toggle:hover {
+            background-color: #f0f0f0;
+        }
+
+        .menu-content {
+            display: flex;
+            flex-direction: column;
+            position: absolute;
+            top: 100%;
+            right: 0;
+            background-color: #fff;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            z-index: 999;
+            opacity: 0;
+            visibility: hidden;
+            transform: translateY(-10px);
+            transition: opacity 0.3s ease, transform 0.3s ease, visibility 0s 0.3s;
+        }
+
+        .menu-content.is-active {
+            opacity: 1;
+            visibility: visible;
+            transform: translateY(0);
+            transition: opacity 0.3s ease, transform 0.3s ease;
+        }
+
+        .menu-content a {
+            padding: 10px 15px;
+            text-decoration: none;
+            color: #333;
+            white-space: nowrap;
+            border-bottom: 1px solid #eee;
+        }
+
+        .menu-content a:last-child {
+            border-bottom: none;
+        }
+
+        .menu-content a:hover {
+            background-color: #f0f0f0;
+        }
+
+        .main-nav ul {
+            list-style: none;
+            margin: 0;
+            padding: 0;
+            display: flex;
+        }
+        .main-nav ul li a {
+            font-size: 14px;
+            padding: 8px 12px;
+            text-decoration: none;
+            color: #333;
+            border-radius: 5px;
+            margin: 0 2px;
+            transition: background-color 0.3s ease;
+        }
+        .main-nav ul li a:hover {
+            background-color: #f0f0f0;
+        }
+
+        /* Yeni iletişim sayfası tasarımı için CSS */
+        .contact-container {
+            display: flex;
+            flex-direction: column;
+            gap: 40px;
+            padding: 40px 20px;
+        }
+        .contact-info-form,
+        .contact-map {
+            width: 100%;
+        }
+        .contact-info-form {
+            display: grid;
+            grid-template-columns: 1fr;
+            gap: 20px;
+        }
+        .contact-details {
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+        }
+        .contact-details h2 {
+            font-size: 24px;
+            color: #333;
+        }
+        .contact-details p {
+            font-size: 16px;
+            color: #555;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        .contact-details p i {
+            color: #007bff;
+            font-size: 18px;
+        }
+        .contact-form h2 {
+            font-size: 24px;
+            color: #333;
+            margin-bottom: 20px;
+        }
+        .contact-form form {
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+        }
+        .contact-form .form-group {
+            display: flex;
+            flex-direction: column;
+        }
+        .contact-form label {
+            font-weight: bold;
+            margin-bottom: 5px;
+        }
+        .contact-form input,
+        .contact-form textarea {
+            padding: 10px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            font-size: 16px;
+        }
+        .contact-form textarea {
+            resize: vertical;
+            min-height: 120px;
+        }
+        .contact-form button {
+            background-color: #007bff;
+            color: #fff;
+            padding: 12px 20px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 16px;
+            transition: background-color 0.3s ease;
+        }
+        .contact-form button:hover {
+            background-color: #0056b3;
+        }
+        #map-container {
+            height: 400px;
+            width: 100%;
+            border-radius: 8px;
+            overflow: hidden;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        }
+
+        /* Tablet ve masaüstü için responsive düzen */
+        @media (min-width: 768px) {
+            .contact-container {
+                flex-direction: row;
+                gap: 60px;
+            }
+            .contact-info-form {
+                grid-template-columns: 1fr 1fr;
+            }
+            .contact-map {
+                width: 50%;
+            }
+            .contact-info-form,
+            .contact-map {
+                width: 50%;
+            }
+        }
+    </style>
+</head>
+<body>
+
+    <header class="main-header">
+        <div class="header-left">
+            <div class="logo"><a href="index.html">LG</a></div>
+        </div>
+        <nav class="main-nav">
+            <ul>
+                <li><a href="index.html" data-i18n="nav-home">Ana Sayfa</a></li>
+                <li><a href="turlar.html" data-i18n="nav-tours">Turlar</a></li>
+                <li><a href="aktiviteler.html" data-i18n="nav-activities">Aktiviteler</a></li>
+                <li><a href="harita.html" data-i18n="nav-map">Harita</a></li>
+                <li><a href="hakkimizda.html" data-i18n="nav-about">Hakkımızda</a></li>
+                <li><a href="iletisim.html" data-i18n="nav-contact">İletişim</a></li>
+            </ul>
+        </nav>
+        <div class="header-right">
+            <div id="language-menu-container" class="menu-container">
+                <div class="menu-toggle" id="language-menu-toggle">
+                    <i class="fas fa-globe"></i>
+                </div>
+                <div class="menu-content" id="language-menu-content">
+                    <a href="#" class="lang-option" data-lang="tr">Türkçe</a>
+                    <a href="#" class="lang-option" data-lang="en">English</a>
+                    <a href="#" class="lang-option" data-lang="de">Deutsch</a>
+                </div>
+            </div>
+
+            <div id="auth-menu-container" class="menu-container">
+                <div class="menu-toggle" id="hamburger-menu-toggle">
+                    <i class="fas fa-bars"></i>
+                </div>
+                <div class="menu-content" id="hamburger-menu-content">
+                    <a href="giris.html" class="btn-login" data-i18n="auth-login">Giriş Yap</a>
+                    <a href="kayit.html" class="btn-register" data-i18n="auth-register">Kayıt Ol</a>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <main class="content-area">
+        <div class="contact-container">
+            <div class="contact-info-form">
+                <div class="contact-details">
+                    <h2 data-i18n="contact-info-title">İletişim Bilgileri</h2>
+                    <p data-i18n="contact-address-info"><i class="fas fa-map-marker-alt"></i><span>Adres: Örnek Mah. Gezgin Sok. No:12/3 Kadıköy, İstanbul</span></p>
+                    <p data-i18n="contact-phone-info"><i class="fas fa-phone"></i><span>Telefon: +90 555 123 45 67</span></p>
+                    <p data-i18n="contact-email-info"><i class="fas fa-envelope"></i><span>E-posta: bilgi@lgturizm.com</span></p>
+                </div>
+                <div class="contact-form">
+                    <h2 data-i18n="contact-form-title">Bizimle İletişime Geçin</h2>
+                    <form action="#" method="POST">
+                        <div class="form-group">
+                            <label for="name" data-i18n="form-name-label">Adınız Soyadınız</label>
+                            <input type="text" id="name" name="name" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="email" data-i18n="form-email-label">E-posta Adresiniz</label>
+                            <input type="email" id="email" name="email" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="message" data-i18n="form-message-label">Mesajınız</label>
+                            <textarea id="message" name="message" required></textarea>
+                        </div>
+                        <button type="submit" data-i18n="form-submit-btn">Gönder</button>
+                    </form>
+                </div>
+            </div>
+            <div class="contact-map">
+                <h2 data-i18n="map-location-title">Ofisimizin Konumu</h2>
+                <div id="map-container">
+                    <iframe src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d1504.606209500053!2d29.02708307221437!3d41.02598373733075!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x14cab77088b90c37%3A0x6734125868a85f83!2sKad%C4%B1k%C3%B6y%2C%20%C4%B0stanbul!5e0!3m2!1str!2str!4v1628178123456!5m2!1str!2str" width="100%" height="100%" style="border:0;" allowfullscreen="" loading="lazy"></iframe>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <footer class="main-footer-section">
+        <div class="footer-container">
+            <div class="footer-column">
+                <h3 data-i18n="footer-title">LG Turizm</h3>
+                <p data-i18n="footer-about">İki kardeşin seyahat tutkusundan doğan acentamızla, dünyanın dört bir yanındaki maceralara sizi de bekliyoruz. Unutulmaz anılar biriktirmek için doğru adrestesiniz.</p>
+            </div>
+            <div class="footer-column">
+                <h4 data-i18n="footer-links-title">Hızlı Linkler</h4>
+                <ul>
+                    <li><a href="index.html" data-i18n="nav-home">Ana Sayfa</a></li>
+                    <li><a href="turlar.html" data-i18n="nav-tours">Turlar</a></li>
+                    <li><a href="aktiviteler.html" data-i18n="nav-activities">Aktiviteler</a></li>
+                    <li><a href="hakkimizda.html" data-i18n="nav-about">Hakkımızda</a></li>
+                    <li><a href="iletisim.html" data-i18n="nav-contact">İletişim</a></li>
+                </ul>
+            </div>
+            <div class="footer-column">
+                <h4 data-i18n="footer-contact-title">İletişim</h4>
+                <p data-i18n="footer-address">📍 Adres: Örnek Mah. Gezgin Sok. No:12/3 Kadıköy, İstanbul</p>
+                <p data-i18n="footer-phone">📞 Telefon: +90 555 123 45 67</p>
+                <p data-i18n="footer-email">✉️ E-posta: bilgi@lgturizm.com</p>
+            </div>
+            <div class="footer-column">
+                <h4 data-i18n="footer-social-title">Bizi Takip Edin</h4>
+                <div class="social-icons">
+                    <a href="#" aria-label="Facebook">FB</a>
+                    <a href="#" aria-label="Instagram">IG</a>
+                    <a href="#" aria-label="Twitter">TW</a>
+                    <a href="#" aria-label="YouTube">YT</a>
+                </div>
+            </div>
+        </div>
+        <div class="footer-bottom">
+            <p data-i18n="footer-copyright">&copy; 2025 LG Turizm. Tüm Hakları Saklıdır.</p>
+        </div>
+    </footer>
+
+    <script src="main-auth.js"></script>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            // Dropdown menüleri için mevcut kod
+            const allMenuToggles = document.querySelectorAll('.menu-toggle');
+            const allMenuContents = document.querySelectorAll('.menu-content');
+
+            allMenuToggles.forEach(toggle => {
+                toggle.addEventListener('click', function(event) {
+                    event.stopPropagation();
+                    const targetMenuId = this.id.replace('-toggle', '-content');
+                    const targetMenu = document.getElementById(targetMenuId);
+
+                    allMenuContents.forEach(menu => {
+                        if (menu.id !== targetMenuId) {
+                            menu.classList.remove('is-active');
+                        }
+                    });
+
+                    targetMenu.classList.toggle('is-active');
+                });
+            });
+
+            document.addEventListener('click', function() {
+                allMenuContents.forEach(menu => {
+                    menu.classList.remove('is-active');
+                });
+            });
+
+            allMenuContents.forEach(menu => {
+                menu.addEventListener('click', function(event) {
+                    event.stopPropagation();
+                });
+            });
+            
+            const languageMenuContent = document.getElementById('language-menu-content');
+            languageMenuContent.querySelectorAll('a').forEach(option => {
+                option.addEventListener('click', function() {
+                    languageMenuContent.classList.remove('is-active');
+                });
+            });
+
+            // --- YENİ EKLENEN VE GÜNCELLENEN KISIM ---
+            // Çeviri veritabanı
+            const translations = {
+                'tr': {
+                    'page-title': 'İletişim - Acenta Sitem',
+                    'nav-home': 'Ana Sayfa',
+                    'nav-tours': 'Turlar',
+                    'nav-activities': 'Aktiviteler',
+                    'nav-map': 'Harita',
+                    'nav-about': 'Hakkımızda',
+                    'nav-contact': 'İletişim',
+                    'auth-login': 'Giriş Yap',
+                    'auth-register': 'Kayıt Ol',
+                    'contact-info-title': 'İletişim Bilgileri',
+                    'contact-address-info': '<i class="fas fa-map-marker-alt"></i><span>Adres: Örnek Mah. Gezgin Sok. No:12/3 Kadıköy, İstanbul</span>',
+                    'contact-phone-info': '<i class="fas fa-phone"></i><span>Telefon: +90 555 123 45 67</span>',
+                    'contact-email-info': '<i class="fas fa-envelope"></i><span>E-posta: bilgi@lgturizm.com</span>',
+                    'contact-form-title': 'Bizimle İletişime Geçin',
+                    'form-name-label': 'Adınız Soyadınız',
+                    'form-email-label': 'E-posta Adresiniz',
+                    'form-message-label': 'Mesajınız',
+                    'form-submit-btn': 'Gönder',
+                    'map-location-title': 'Ofisimizin Konumu',
+                    'footer-title': 'LG Turizm',
+                    'footer-about': 'İki kardeşin seyahat tutkusundan doğan acentamızla, dünyanın dört bir yanındaki maceralara sizi de bekliyoruz. Unutulmaz anılar biriktirmek için doğru adrestesiniz.',
+                    'footer-links-title': 'Hızlı Linkler',
+                    'footer-contact-title': 'İletişim',
+                    'footer-address': '📍 Adres: Örnek Mah. Gezgin Sok. No:12/3 Kadıköy, İstanbul',
+                    'footer-phone': '📞 Telefon: +90 555 123 45 67',
+                    'footer-email': '✉️ E-posta: bilgi@lgturizm.com',
+                    'footer-social-title': 'Bizi Takip Edin',
+                    'footer-copyright': '&copy; 2025 LG Turizm. Tüm Hakları Saklıdır.'
+                },
+                'en': {
+                    'page-title': 'Contact Us - My Agency Site',
+                    'nav-home': 'Homepage',
+                    'nav-tours': 'Tours',
+                    'nav-activities': 'Activities',
+                    'nav-map': 'Map',
+                    'nav-about': 'About Us',
+                    'nav-contact': 'Contact',
+                    'auth-login': 'Login',
+                    'auth-register': 'Register',
+                    'contact-info-title': 'Contact Information',
+                    'contact-address-info': '<i class="fas fa-map-marker-alt"></i><span>Address: Sample Street. Traveler Ave. No:12/3 Kadıköy, Istanbul</span>',
+                    'contact-phone-info': '<i class="fas fa-phone"></i><span>Phone: +90 555 123 45 67</span>',
+                    'contact-email-info': '<i class="fas fa-envelope"></i><span>Email: bilgi@lgturizm.com</span>',
+                    'contact-form-title': 'Get in Touch with Us',
+                    'form-name-label': 'Your Name and Surname',
+                    'form-email-label': 'Your Email Address',
+                    'form-message-label': 'Your Message',
+                    'form-submit-btn': 'Send',
+                    'map-location-title': 'Our Office Location',
+                    'footer-title': 'LG Tourism',
+                    'footer-about': 'With our agency born from the passion for travel of two brothers, we welcome you to adventures all over the world. You are at the right place to collect unforgettable memories.',
+                    'footer-links-title': 'Quick Links',
+                    'footer-contact-title': 'Contact',
+                    'footer-address': '📍 Address: Sample Street. Gezgin Ave. No:12/3 Kadıköy, Istanbul',
+                    'footer-phone': '📞 Phone: +90 555 123 45 67',
+                    'footer-email': '✉️ Email: bilgi@lgturizm.com',
+                    'footer-social-title': 'Follow Us',
+                    'footer-copyright': '&copy; 2025 LG Tourism. All Rights Reserved.'
+                },
+                'de': {
+                    'page-title': 'Kontakt - Meine Agentur-Website',
+                    'nav-home': 'Startseite',
+                    'nav-tours': 'Touren',
+                    'nav-activities': 'Aktivitäten',
+                    'nav-map': 'Karte',
+                    'nav-about': 'Über uns',
+                    'nav-contact': 'Kontakt',
+                    'auth-login': 'Anmelden',
+                    'auth-register': 'Registrieren',
+                    'contact-info-title': 'Kontaktinformationen',
+                    'contact-address-info': '<i class="fas fa-map-marker-alt"></i><span>Adresse: Musterstraße. Wanderer Allee. Nr.12/3 Kadıköy, Istanbul</span>',
+                    'contact-phone-info': '<i class="fas fa-phone"></i><span>Telefon: +90 555 123 45 67</span>',
+                    'contact-email-info': '<i class="fas fa-envelope"></i><span>E-Mail: bilgi@lgturizm.com</span>',
+                    'contact-form-title': 'Kontaktieren Sie uns',
+                    'form-name-label': 'Ihr Name und Nachname',
+                    'form-email-label': 'Ihre E-Mail-Adresse',
+                    'form-message-label': 'Ihre Nachricht',
+                    'form-submit-btn': 'Senden',
+                    'map-location-title': 'Standort unseres Büros',
+                    'footer-title': 'LG Tourismus',
+                    'footer-about': 'Mit unserer Agentur, die aus der Leidenschaft von zwei Brüdern für das Reisen entstanden ist, heißen wir Sie zu Abenteuern auf der ganzen Welt willkommen. Sie sind am richtigen Ort, um unvergessliche Erinnerungen zu sammeln.',
+                    'footer-links-title': 'Schnell-Links',
+                    'footer-contact-title': 'Kontakt',
+                    'footer-address': '📍 Adresse: Musterstraße. Wanderer Allee. Nr.12/3 Kadıköy, Istanbul',
+                    'footer-phone': '📞 Telefon: +90 555 123 45 67',
+                    'footer-email': '✉️ E-Mail: bilgi@lgturizm.com',
+                    'footer-social-title': 'Folgen Sie uns',
+                    'footer-copyright': '&copy; 2025 LG Tourismus. Alle Rechte vorbehalten.'
+                }
+            };
+
+            function setLanguage(lang) {
+                document.querySelectorAll('[data-i18n]').forEach(element => {
+                    const key = element.getAttribute('data-i18n');
+                    if (translations[lang] && translations[lang][key]) {
+                        element.innerHTML = translations[lang][key];
+                    }
+                });
+                localStorage.setItem('selectedLang', lang);
+                document.documentElement.lang = lang;
+            }
+
+            const langOptions = document.querySelectorAll('.lang-option');
+            langOptions.forEach(option => {
+                option.addEventListener('click', function(e) {
+                    e.preventDefault();
+                    const lang = this.getAttribute('data-lang');
+                    setLanguage(lang);
+                });
+            });
+
+            const savedLang = localStorage.getItem('selectedLang') || 'tr';
+            setLanguage(savedLang);
+        });
+    </script>
+</body>
+</html>

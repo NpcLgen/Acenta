@@ -1,0 +1,738 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title data-i18n="page-title">Ana Sayfa - Acenta Sitem</title>
+    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" integrity="sha512-9usAa10IRO0HhonpyAIVpjrylPvoDwiPUiKdWk5t3PyolY1cOd4DSE0Ga+ri4AuTroPR5aQvXU9xC6qOPnzFeg==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+    
+    <style>
+        
+/* Header'ın sağ tarafı için genel düzen */
+.header-right {
+    display: flex;
+    align-items: center; /* Dikey olarak ortalar */
+    margin-left: center; /* Navigasyon menüsünden ayırır, sağa yaslar */
+}
+
+/* Her iki menüyü kapsayan div için stil */
+.menu-container {
+    position: relative; /* İçindeki menüleri konumlandırmak için */
+    margin-left: 10px; /* Menüler arasında boşluk bırakır */
+}
+
+/* Her iki menü butonu (toggle) için ortak stil */
+.menu-toggle {
+    padding: 8px 12px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+}
+
+.menu-toggle i {
+    font-size: 14px;
+    color: #333;
+}
+
+.menu-toggle:hover {
+    background-color: #f0f0f0;
+}
+
+/* Her iki menü içeriği için ortak stil */
+.menu-content {
+    display: flex;
+    flex-direction: column;
+    position: absolute;
+    top: 100%;
+    right: 0; /* Menüyü sağa hizalar */
+    background-color: #fff;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    z-index: 999;
+    
+    /* Başlangıç durumu (gizli) */
+    opacity: 0;
+    visibility: hidden;
+    transform: translateY(-10px);
+    transition: opacity 0.3s ease, transform 0.3s ease, visibility 0s 0.3s;
+}
+
+/* Menü açıldığında uygulanacak stil */
+.menu-content.is-active {
+    opacity: 1;
+    visibility: visible;
+    transform: translateY(0);
+    transition: opacity 0.3s ease, transform 0.3s ease;
+}
+
+.menu-content a {
+    padding: 10px 15px;
+    text-decoration: none;
+    color: #333;
+    white-space: nowrap;
+    border-bottom: 1px solid #eee;
+}
+
+.menu-content a:last-child {
+    border-bottom: none;
+}
+
+.menu-content a:hover {
+    background-color: #f0f0f0;
+}
+
+/* Ana navigasyon menüsü stilleri (değişmedi) */
+.main-nav ul {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    display: flex;
+}
+.main-nav ul li a {
+    font-size: 14px;
+    padding: 8px 12px;
+    text-decoration: none;
+    color: #333;
+    border-radius: 5px;
+    margin: 0 2px;
+    transition: background-color 0.3s ease;
+}
+.main-nav ul li a:hover {
+    background-color: #f0f0f0;
+}
+
+.search-panel { position: relative; }
+.autocomplete-list{
+position:absolute; left:0; right:0; top:100%; margin-top:6px;
+background:#fff; border:1px solid #ddd; border-radius:8px;
+box-shadow:0 6px 18px rgba(0,0,0,.08); max-height:300px; overflow:auto; z-index:1000
+}
+.autocomplete-item{
+display:flex; justify-content:space-between; align-items:center;
+gap:12px; padding:10px 12px; cursor:pointer
+}
+.autocomplete-item:hover{ background:#f6f8fa }
+.tour-name{ font-weight:600; color:#222; }
+.tour-badge{
+font-size:12px; padding:4px 8px; border-radius:999px; font-weight:700;
+background:#eef2ff; color:#3730a3;
+}
+.tour-badge.outbound{ background:#e6fffb; color:#065f46; } /* yurt dışı */
+
+</style>
+
+<header class="main-header">
+    <div class="header-left">
+        <div class="logo"><a href="index.html">LG</a></div>
+    </div>
+    <nav class="main-nav">
+        <ul>
+            <li><a href="index.html" data-i18n="nav-home">Ana Sayfa</a></li>
+            <li><a href="turlar.html" data-i18n="nav-tours">Turlar</a></li>
+            <li><a href="aktiviteler.html" data-i18n="nav-activities">Aktiviteler</a></li>
+            <li><a href="harita.html" data-i18n="nav-map">Harita</a></li>
+            <li><a href="hakkimizda.html" data-i18n="nav-about">Hakkımızda</a></li>
+            <li><a href="iletisim.html" data-i18n="nav-contact">İletişim</a></li>
+        </ul>
+    </nav>
+    <div class="header-right">
+        <div id="language-menu-container" class="menu-container">
+            <div class="menu-toggle" id="language-menu-toggle">
+                <i class="fas fa-globe"></i>
+            </div>
+            <div class="menu-content" id="language-menu-content">
+                <a href="#" class="lang-option" data-lang="tr">Türkçe</a>
+                <a href="#" class="lang-option" data-lang="en">English</a>
+                <a href="#" class="lang-option" data-lang="de">Deutsch</a>
+            </div>
+        </div>
+
+        <div id="auth-menu-container" class="menu-container">
+            <div class="menu-toggle" id="hamburger-menu-toggle">
+                <i class="fas fa-bars"></i>
+            </div>
+            <div class="menu-content" id="hamburger-menu-content">
+                <a href="giris.html" class="btn-login" data-i18n="auth-login">Giriş Yap</a>
+                <a href="kayit.html" class="btn-register" data-i18n="auth-register">Kayıt Ol</a>
+            </div>
+        </div>
+    </div>
+</header>
+
+<main>
+    <section class="hero-section">
+<div class="hero-background"></div>
+<div class="hero-content">
+<h1>Hayalinizdeki Tatil Başlasın</h1>
+<p class="hero-subtitle">Size özel rotalarla dünyanın dört bir yanını keşfedin.</p>
+
+<!-- Tur Arama Paneli (geliştirildi) -->
+<div class="search-panel">
+<input id="search-input" type="text" placeholder="Nereye gitmek istersiniz? (Örn: Kapadokya)">
+<select id="region-select">
+<option value="">Tüm Bölgeler</option>
+<option value="yurt-ici">Yurt içi</option>
+<option value="yurt-disi">Yurt dışı</option>
+</select>
+<button id="search-btn" class="search-btn">Turu Bul</button>
+
+<!-- Öneri listesi -->
+<div id="autocomplete-list" class="autocomplete-list" style="display:none;"></div>
+</div>
+</div>
+</section>
+
+
+        <section class="popular-tours-section">
+            <h2 class="section-title" data-i18n="featured-tours-title">Öne Çıkan Turlar</h2>
+            <div class="tour-grid">
+                <div class="tour-card">
+                    <img src="https://picsum.photos/400/250?random=5" alt="İtalya Turu">
+                    <h3 data-i18n="tour-italy-title">Klasik İtalya Turu</h3>
+                    <p data-i18n="tour-italy-description">Kolezyum'dan Venedik kanallarına unutulmaz bir deneyim.</p>
+                    <a href="tur-detay.html?id=roma" class="map-link" data-i18n="btn-details">Detayları İncele</a>
+                </div>
+                <div class="tour-card">
+                    <img src="https://picsum.photos/400/250?random=6" alt="Kapadokya Turu">
+                    <h3 data-i18n="tour-cappadocia-title">Kapadokya Balon Turu</h3>
+                    <p data-i18n="tour-cappadocia-description">Peribacalarını gökyüzünden izleyin.</p>
+                    <a href="tur-detay.html?id=kapadokya" class="map-link" data-i18n="btn-details">Detayları İncele</a>
+                </div>
+                <div class="tour-card">
+                    <img src="https://picsum.photos/400/250?random=2" alt="Balkanlar Turu">
+                    <h3 data-i18n="tour-balkans-title">Balkanlar Turu</h3>
+                    <p data-i18n="tour-balkans-description">Tarih ve doğanın iç içe geçtiği bir macera.</p>
+                    <a href="tur-detay.html?id=balkanlar" class="map-link" data-i18n="btn-details">Detayları İncele</a>
+                </div>
+                <div class="tour-card">
+                    <img src="https://picsum.photos/400/250?random=4" alt="Ege Turu">
+                    <h3 data-i18n="tour-aegean-title">Ege & Akdeniz Sahil Turu</h3>
+                    <p data-i18n="tour-aegean-description">İzmir'den Antalya'ya masmavi bir yolculuk.</p>
+                    <a href="tur-detay.html?id=ege-akdeniz" class="map-link" data-i18n="btn-details">Detayları İncele</a>
+                </div>
+            </div>
+        </section>
+
+        <section class="blog-section">
+            <h2 class="section-title" data-i18n="blog-title">Seyahat Günlüğümüzden</h2>
+            <div class="blog-grid">
+                <div class="blog-card">
+                    <a href="#" class="blog-image-link">
+                        <img src="https://picsum.photos/400/250?random=31" alt="Blog Yazısı 1 Görseli">
+                    </a>
+                    <div class="blog-content">
+                        <p class="blog-category" data-i18n="blog-category-1">GEZİ REHBERİ</p>
+                        <h3 class="blog-title"><a href="#" data-i18n="blog-post-1-title">Kapadokya'da Balon Turu İçin En İyi Zaman Nedir?</a></h3>
+                        <p class="blog-excerpt" data-i18n="blog-post-1-excerpt">Balonların gökyüzünde dans ettiği o büyülü anları yakalamak için hangi mevsimi seçmelisiniz? İşte size özel ipuçları...</p>
+                        <a href="#" class="blog-read-more" data-i18n="btn-read-more">Yazıyı Oku →</a>
+                    </div>
+                </div>
+                <div class="blog-card">
+                    <a href="#" class="blog-image-link">
+                        <img src="https://picsum.photos/400/250?random=32" alt="Blog Yazısı 2 Görseli">
+                    </a>
+                    <div class="blog-content">
+                        <p class="blog-category" data-i18n="blog-category-2">İPUÇLARI</p>
+                        <h3 class="blog-title"><a href="#" data-i18n="blog-post-2-title">Vizesiz Gidebileceğiniz 5 Muhteşem Balkan Ülkesi</a></h3>
+                        <p class="blog-excerpt" data-i18n="blog-post-2-excerpt">Pasaportunuzu kapın ve vize derdi olmadan harika bir Balkan turuna çıkın! İşte size özel rota önerileri...</p>
+                        <a href="#" class="blog-read-more" data-i18n="btn-read-more">Yazıyı Oku →</a>
+                    </div>
+                </div>
+                <div class="blog-card">
+                    <a href="#" class="blog-image-link">
+                        <img src="https://picsum.photos/400/250?random=33" alt="Blog Yazısı 3 Görseli">
+                    </a>
+                    <div class="blog-content">
+                        <p class="blog-category" data-i18n="blog-category-3">LEZZET DURAKLARI</p>
+                        <h3 class="blog-title"><a href="#" data-i18n="blog-post-3-title">İtalya'da Mutlaka Denemeniz Gereken 10 Lezzet</a></h3>
+                        <p class="blog-excerpt" data-i18n="blog-post-3-excerpt">Pizza ve makarnanın ötesinde, İtalya'nın yerel lezzetlerini keşfetmeye hazır mısınız? İşte gurme rehberimiz...</p>
+                        <a href="#" class="blog-read-more" data-i18n="btn-read-more">Yazıyı Oku →</a>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section class="features-section">
+            <div class="features-container">
+                <div class="feature-item">
+                    <div class="feature-icon">🧭</div>
+                    <h3 data-i18n="feature-title-1">Uzman Rotalar</h3>
+                    <p data-i18n="feature-description-1">Alanında uzman ekibimiz tarafından hazırlanan, denenmiş ve en iyi rotalar.</p>
+                </div>
+                <div class="feature-item">
+                    <div class="feature-icon">🛡️</div>
+                    <h3 data-i18n="feature-title-2">%100 Güvenli Ödeme</h3>
+                    <p data-i18n="feature-description-2">Tüm ödemeleriniz SSL sertifikası ve en güncel güvenlik sistemleriyle korunur.</p>
+                </div>
+                <div class="feature-item">
+                    <div class="feature-icon">👨‍🏫</div>
+                    <h3 data-i18n="feature-title-3">Profesyonel Rehberler</h3>
+                    <p data-i18n="feature-description-3">Bölgeye hakim, lisanslı ve tecrübeli rehberlerle çalışma garantisi.</p>
+                </div>
+                <div class="feature-item">
+                    <div class="feature-icon">📞</div>
+                    <h3 data-i18n="feature-title-4">7/24 Destek</h3>
+                    <p data-i18n="feature-description-4">Tur öncesi ve sırasında her an yanınızdayız, bir telefon uzağınızdayız.</p>
+                </div>
+            </div>
+        </section>
+        
+        <section class="testimonials-section">
+            <h2 class="section-title" data-i18n="testimonials-title">Bizimle Gezenler Anlatıyor</h2>
+            <div class="testimonials-grid">
+                <div class="testimonial-card">
+                    <p class="testimonial-text" data-i18n="testimonial-1-text">“Hayatımda yaşadığım en organize ve en eğlenceli turdu. Rehberimiz her detayı düşünmüştü. Kesinlikle tekrar tercih edeceğim.”</p>
+                    <div class="testimonial-author">
+                        <img src="https://picsum.photos/id/237/100" alt="Müşteri Fotoğrafı">
+                        <div class="author-info">
+                            <p class="author-name" data-i18n="testimonial-1-author">Ayşe Yılmaz</p>
+                            <p class="author-tour" data-i18n="testimonial-1-tour">Balkanlar Turu</p>
+                        </div>
+                    </div>
+                </div>
+                <div class="testimonial-card">
+                    <p class="testimonial-text" data-i18n="testimonial-2-text">“İlk başta tereddütlerim vardı ama tur boyunca o kadar sıcak bir ortam vardı ki kendimi arkadaşlarla tatile çıkmış gibi hissettim. Her şey için teşekkürler!”</p>
+                    <div class="testimonial-author">
+                        <img src="https://picsum.photos/id/1027/100" alt="Müşteri Fotoğrafı">
+                        <div class="author-info">
+                            <p class="author-name" data-i18n="testimonial-2-author">John Smith</p>
+                            <p class="author-tour" data-i18n="testimonial-2-tour">Ege & Akdeniz Turu</p>
+                        </div>
+                    </div>
+                </div>
+                <div class="testimonial-card">
+                    <p class="testimonial-text" data-i18n="testimonial-3-text">“Harita üzerindeki rotaları görmek ve sonra o rotaları bizzat yaşamak inanılmaz bir deneyim. Hem teknoloji hem de samimiyeti bir araya getiren harika bir acenta.”</p>
+                    <div class="testimonial-author">
+                        <img src="https://picsum.photos/id/64/100" alt="Müşteri Fotoğrafı">
+                        <div class="author-info">
+                            <p class="author-name" data-i18n="testimonial-3-author">Fatma Demir</p>
+                            <p class="author-tour" data-i18n="testimonial-3-tour">Klasik İtalya Turu</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </main>
+    
+    <footer class="main-footer-section">
+        <div class="footer-container">
+            <div class="footer-column">
+                <h3 data-i18n="footer-title">LG Turizm</h3>
+                <p data-i18n="footer-about">İki kardeşin seyahat tutkusundan doğan acentamızla, dünyanın dört bir yanındaki maceralara sizi de bekliyoruz. Unutulmaz anılar biriktirmek için doğru adrestesiniz.</p>
+            </div>
+            <div class="footer-column">
+                <h4 data-i18n="footer-links-title">Hızlı Linkler</h4>
+                <ul>
+                    <li><a href="index.html" data-i18n="nav-home">Ana Sayfa</a></li>
+                    <li><a href="turlar.html" data-i18n="nav-tours">Turlar</a></li>
+                    <li><a href="aktiviteler.html" data-i18n="nav-activities">Aktiviteler</a></li>
+                    <li><a href="hakkimizda.html" data-i18n="nav-about">Hakkımızda</a></li>
+                    <li><a href="iletisim.html" data-i18n="nav-contact">İletişim</a></li>
+                </ul>
+            </div>
+            <div class="footer-column">
+                <h4 data-i18n="footer-contact-title">İletişim</h4>
+                <p data-i18n="footer-address">📍 Adres: Örnek Mah. Gezgin Sok. No:12/3 Kadıköy, İstanbul</p>
+                <p data-i18n="footer-phone">📞 Telefon: +90 555 123 45 67</p>
+                <p data-i18n="footer-email">✉️ E-posta: bilgi@lgturizm.com</p>
+            </div>
+            <div class="footer-column">
+                <h4 data-i18n="footer-social-title">Bizi Takip Edin</h4>
+                <div class="social-icons">
+                    <a href="#" aria-label="Facebook">FB</a>
+                    <a href="#" aria-label="Instagram">IG</a>
+                    <a href="#" aria-label="Twitter">TW</a>
+                    <a href="#" aria-label="YouTube">YT</a>
+                </div>
+            </div>
+        </div>
+        <div class="footer-bottom">
+            <p data-i18n="footer-copyright">&copy; 2025 LG Turizm. Tüm Hakları Saklıdır.</p>
+        </div>
+    </footer>
+
+    <!-- Veri kaynağı GEREKLİ -->
+<script src="toursData.js"></script>
+
+<!-- Geliştirilmiş arama davranışı -->
+<script>
+(function(){
+const input = document.getElementById('search-input');
+const select = document.getElementById('region-select');
+const list = document.getElementById('autocomplete-list');
+const searchBtn = document.getElementById('search-btn');
+
+let chosenId = null; // listeden seçilen turun id'si
+
+const regionLabel = (cat) => cat === 'yurt-ici' ? 'Yurt içi' : 'Yurt dışı';
+
+function renderList(items){
+if (!items.length){ list.style.display='none'; list.innerHTML=''; return; }
+list.innerHTML = items.map(t => `
+<div class="autocomplete-item" data-id="${t.id}">
+<span class="tour-name">${t.name}</span>
+<span class="tour-badge ${t.category==='yurt-disi'?'outbound':''}">
+${regionLabel(t.category)}
+</span>
+</div>
+`).join('');
+list.style.display='block';
+}
+
+function searchTours(q){
+const qn = q.trim().toLowerCase();
+const region = select.value; // '', 'yurt-ici', 'yurt-disi'
+let results = toursData.filter(t => t.name.toLowerCase().includes(qn));
+if (region) results = results.filter(t => t.category === region);
+return results.slice(0, 8);
+}
+
+input.addEventListener('input', () => {
+chosenId = null;
+const res = input.value.length ? searchTours(input.value) : [];
+renderList(res);
+});
+
+// Enter ile arama
+input.addEventListener('keydown', (e) => {
+if (e.key === 'Enter'){
+e.preventDefault();
+performSearch();
+}
+});
+
+// Öneri seçimi
+list.addEventListener('click', (e) => {
+const item = e.target.closest('.autocomplete-item');
+if (!item) return;
+const id = item.getAttribute('data-id');
+const tour = toursData.find(t => t.id === id);
+if (!tour) return;
+chosenId = tour.id;
+input.value = tour.name;
+list.style.display='none';
+});
+
+// Dışarı tıklayınca listeyi kapat
+document.addEventListener('click', (e) => {
+if (!list.contains(e.target) && e.target !== input){
+list.style.display='none';
+}
+});
+
+searchBtn.addEventListener('click', performSearch);
+
+function performSearch(){
+// Öncelik: listeden seçilmişse direkt git
+if (chosenId){
+window.location.href = `tur-detay.html?id=${chosenId}`;
+return;
+}
+// Aksi halde adı eşleşen tek tur varsa onu aç
+const region = select.value;
+const qn = input.value.trim().toLowerCase();
+let matches = toursData.filter(t => t.name.toLowerCase() === qn);
+if (!matches.length && qn){
+matches = toursData.filter(t => t.name.toLowerCase().includes(qn));
+}
+if (region) matches = matches.filter(t => t.category === region);
+if (matches.length){
+window.location.href = `tur-detay.html?id=${matches[0].id}`;
+} else {
+alert('Uygun tur bulunamadı. Lütfen listeden bir tur seçin veya farklı arayın.');
+}
+}
+})();
+</script>
+
+<script src="main-auth.js"></script>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            // Dropdown menüleri için mevcut kod
+            const allMenuToggles = document.querySelectorAll('.menu-toggle');
+            const allMenuContents = document.querySelectorAll('.menu-content');
+
+            allMenuToggles.forEach(toggle => {
+                toggle.addEventListener('click', function(event) {
+                    event.stopPropagation();
+                    const targetMenuId = this.id.replace('-toggle', '-content');
+                    const targetMenu = document.getElementById(targetMenuId);
+
+                    allMenuContents.forEach(menu => {
+                        if (menu.id !== targetMenuId) {
+                            menu.classList.remove('is-active');
+                        }
+                    });
+
+                    targetMenu.classList.toggle('is-active');
+                });
+            });
+
+            document.addEventListener('click', function() {
+                allMenuContents.forEach(menu => {
+                    menu.classList.remove('is-active');
+                });
+            });
+
+            // Menü içeriğine tıklandığında kapanmasını engelle
+            allMenuContents.forEach(menu => {
+                menu.addEventListener('click', function(event) {
+                    event.stopPropagation();
+                });
+            });
+            
+            // --- YENİ EKLENEN KISIM ---
+            // Dil seçeneklerinden birine tıklandığında menüyü kapat
+            const languageMenuContent = document.getElementById('language-menu-content');
+            languageMenuContent.querySelectorAll('a').forEach(option => {
+                option.addEventListener('click', function() {
+                    languageMenuContent.classList.remove('is-active');
+                });
+            });
+            // --- YENİ EKLENEN KISIM SONU ---
+
+            // Çeviri veritabanı
+            const translations = {
+                'tr': {
+                    'page-title': 'Ana Sayfa - Acenta Sitem',
+                    'nav-home': 'Ana Sayfa',
+                    'nav-tours': 'Turlar',
+                    'nav-activities': 'Aktiviteler',
+                    'nav-map': 'Harita',
+                    'nav-about': 'Hakkımızda',
+                    'nav-contact': 'İletişim',
+                    'auth-login': 'Giriş Yap',
+                    'auth-register': 'Kayıt Ol',
+                    'hero-title': 'Hayalindeki Tura Çıkmaya Hazır mısın?',
+                    'hero-subtitle': 'Türkiye ve Dünya genelinde en popüler tur rotaları, unutulmaz deneyimler seni bekliyor.',
+                    'placeholder-search': 'Tur arayın...',
+                    'option-all-regions': 'Tüm Bölgeler',
+                    'option-black-sea': 'Karadeniz',
+                    'option-mediterranean': 'Akdeniz',
+                    'option-aegean': 'Ege',
+                    'btn-search': 'Ara',
+                    'featured-tours-title': 'Öne Çıkan Turlar',
+                    'tour-italy-title': 'Klasik İtalya Turu',
+                    'tour-italy-description': 'Kolezyum\'dan Venedik kanallarına unutulmaz bir deneyim.',
+                    'btn-details': 'Detayları İncele',
+                    'tour-cappadocia-title': 'Kapadokya Balon Turu',
+                    'tour-cappadocia-description': 'Peribacalarını gökyüzünden izleyin.',
+                    'tour-balkans-title': 'Balkanlar Turu',
+                    'tour-balkans-description': 'Tarih ve doğanın iç içe geçtiği bir macera.',
+                    'tour-aegean-title': 'Ege & Akdeniz Sahil Turu',
+                    'tour-aegean-description': 'İzmir\'den Antalya\'ya masmavi bir yolculuk.',
+                    'blog-title': 'Seyahat Günlüğümüzden',
+                    'blog-category-1': 'GEZİ REHBERİ',
+                    'blog-post-1-title': 'Kapadokya\'da Balon Turu İçin En İyi Zaman Nedir?',
+                    'blog-post-1-excerpt': 'Balonların gökyüzünde dans ettiği o büyülü anları yakalamak için hangi mevsimi seçmelisiniz? İşte size özel ipuçları...',
+                    'btn-read-more': 'Yazıyı Oku →',
+                    'blog-category-2': 'İPUÇLARI',
+                    'blog-post-2-title': 'Vizesiz Gidebileceğiniz 5 Muhteşem Balkan Ülkesi',
+                    'blog-post-2-excerpt': 'Pasaportunuzu kapın ve vize derdi olmadan harika bir Balkan turuna çıkın! İşte size özel rota önerileri...',
+                    'blog-category-3': 'LEZZET DURAKLARI',
+                    'blog-post-3-title': 'İtalya\'da Mutlaka Denemeniz Gereken 10 Lezzet',
+                    'blog-post-3-excerpt': 'Pizza ve makarnanın ötesinde, İtalya\'nın yerel lezzetlerini keşfetmeye hazır mısınız? İşte gurme rehberimiz...',
+                    'feature-title-1': 'Uzman Rotalar',
+                    'feature-description-1': 'Alanında uzman ekibimiz tarafından hazırlanan, denenmiş ve en iyi rotalar.',
+                    'feature-title-2': '%100 Güvenli Ödeme',
+                    'feature-description-2': 'Tüm ödemeleriniz SSL sertifikası ve en güncel güvenlik sistemleriyle korunur.',
+                    'feature-title-3': 'Profesyonel Rehberler',
+                    'feature-description-3': 'Bölgeye hakim, lisanslı ve tecrübeli rehberlerle çalışma garantisi.',
+                    'feature-title-4': '7/24 Destek',
+                    'feature-description-4': 'Tur öncesi ve sırasında her an yanınızdayız, bir telefon uzağınızdayız.',
+                    'testimonials-title': 'Bizimle Gezenler Anlatıyor',
+                    'testimonial-1-text': '“Hayatımda yaşadığım en organize ve en eğlenceli turdu. Rehberimiz her detayı düşünmüştü. Kesinlikle tekrar tercih edeceğim.”',
+                    'testimonial-1-author': 'Ayşe Yılmaz',
+                    'testimonial-1-tour': 'Balkanlar Turu',
+                    'testimonial-2-text': '“İlk başta tereddütlerim vardı ama tur boyunca o kadar sıcak bir ortam vardı ki kendimi arkadaşlarla tatile çıkmış gibi hissettim. Her şey için teşekkürler!”',
+                    'testimonial-2-author': 'John Smith',
+                    'testimonial-2-tour': 'Ege & Akdeniz Turu',
+                    'testimonial-3-text': '“Harita üzerindeki rotaları görmek ve sonra o rotaları bizzat yaşamak inanılmaz bir deneyim. Hem teknoloji hem de samimiyeti bir araya getiren harika bir acenta.”',
+                    'testimonial-3-author': 'Fatma Demir',
+                    'testimonial-3-tour': 'Klasik İtalya Turu',
+                    'footer-title': 'LG Turizm',
+                    'footer-about': 'İki kardeşin seyahat tutkusundan doğan acentamızla, dünyanın dört bir yanındaki maceralara sizi de bekliyoruz. Unutulmaz anılar biriktirmek için doğru adrestesiniz.',
+                    'footer-links-title': 'Hızlı Linkler',
+                    'footer-contact-title': 'İletişim',
+                    'footer-address': '📍 Adres: Örnek Mah. Gezgin Sok. No:12/3 Kadıköy, İstanbul',
+                    'footer-phone': '📞 Telefon: +90 555 123 45 67',
+                    'footer-email': '✉️ E-posta: bilgi@lgturizm.com',
+                    'footer-social-title': 'Bizi Takip Edin',
+                    'footer-copyright': '&copy; 2025 LG Turizm. Tüm Hakları Saklıdır.'
+                },
+                'en': {
+                    'page-title': 'Homepage - My Agency Site',
+                    'nav-home': 'Homepage',
+                    'nav-tours': 'Tours',
+                    'nav-activities': 'Activities',
+                    'nav-map': 'Map',
+                    'nav-about': 'About Us',
+                    'nav-contact': 'Contact',
+                    'auth-login': 'Login',
+                    'auth-register': 'Register',
+                    'hero-title': 'Ready for the Tour of Your Dreams?',
+                    'hero-subtitle': 'The most popular tour routes in Turkey and around the world, unforgettable experiences await you.',
+                    'placeholder-search': 'Search for a tour...',
+                    'option-all-regions': 'All Regions',
+                    'option-black-sea': 'Black Sea',
+                    'option-mediterranean': 'Mediterranean',
+                    'option-aegean': 'Aegean',
+                    'btn-search': 'Search',
+                    'featured-tours-title': 'Featured Tours',
+                    'tour-italy-title': 'Classic Italy Tour',
+                    'tour-italy-description': 'An unforgettable experience from the Colosseum to the canals of Venice.',
+                    'btn-details': 'View Details',
+                    'tour-cappadocia-title': 'Cappadocia Balloon Tour',
+                    'tour-cappadocia-description': 'Watch the fairy chimneys from the sky.',
+                    'tour-balkans-title': 'Balkans Tour',
+                    'tour-balkans-description': 'An adventure where history and nature are intertwined.',
+                    'tour-aegean-title': 'Aegean & Mediterranean Coast Tour',
+                    'tour-aegean-description': 'A deep blue journey from İzmir to Antalya.',
+                    'blog-title': 'From Our Travel Journal',
+                    'blog-category-1': 'TRAVEL GUIDE',
+                    'blog-post-1-title': 'What is the Best Time for a Balloon Tour in Cappadocia?',
+                    'blog-post-1-excerpt': 'Which season should you choose to catch those magical moments when balloons dance in the sky? Here are our special tips...',
+                    'btn-read-more': 'Read More →',
+                    'blog-category-2': 'TIPS',
+                    'blog-post-2-title': '5 Wonderful Balkan Countries You Can Visit Without a Visa',
+                    'blog-post-2-excerpt': 'Grab your passport and go on a great Balkan tour without the hassle of a visa! Here are our special route suggestions...',
+                    'blog-category-3': 'TASTE STOPS',
+                    'blog-post-3-title': '10 Delicacies You Must Try in Italy',
+                    'blog-post-3-excerpt': 'Beyond pizza and pasta, are you ready to discover the local flavors of Italy? Here is our gourmet guide...',
+                    'feature-title-1': 'Expert Routes',
+                    'feature-description-1': 'Tried and best routes prepared by our expert team.',
+                    'feature-title-2': '100% Secure Payment',
+                    'feature-description-2': 'All your payments are protected with SSL certificates and the latest security systems.',
+                    'feature-title-3': 'Professional Guides',
+                    'feature-description-3': 'Guarantee of working with licensed and experienced guides who are experts in the region.',
+                    'feature-title-4': '24/7 Support',
+                    'feature-description-4': 'We are with you before and during the tour, just a phone call away.',
+                    'testimonials-title': 'Those Who Traveled With Us Tell Their Stories',
+                    'testimonial-1-text': '“It was the most organized and fun tour I have ever experienced. Our guide had thought of every detail. I will definitely choose them again.”',
+                    'testimonial-1-author': 'Ayşe Yılmaz',
+                    'testimonial-1-tour': 'Balkans Tour',
+                    'testimonial-2-text': '“At first, I had my doubts, but there was such a warm atmosphere during the tour that I felt like I was on vacation with friends. Thanks for everything!”',
+                    'testimonial-2-author': 'John Smith',
+                    'testimonial-2-tour': 'Aegean & Mediterranean Tour',
+                    'testimonial-3-text': '“Seeing the routes on the map and then experiencing them in person is an incredible experience. A wonderful agency that brings both technology and sincerity together.”',
+                    'testimonial-3-author': 'Fatma Demir',
+                    'testimonial-3-tour': 'Classic Italy Tour',
+                    'footer-title': 'LG Tourism',
+                    'footer-about': 'With our agency born from the passion for travel of two brothers, we welcome you to adventures all over the world. You are at the right place to collect unforgettable memories.',
+                    'footer-links-title': 'Quick Links',
+                    'footer-contact-title': 'Contact',
+                    'footer-address': '📍 Address: Sample Street. Gezgin Ave. No:12/3 Kadıköy, Istanbul',
+                    'footer-phone': '📞 Phone: +90 555 123 45 67',
+                    'footer-email': '✉️ Email: bilgi@lgturizm.com',
+                    'footer-social-title': 'Follow Us',
+                    'footer-copyright': '&copy; 2025 LG Tourism. All Rights Reserved.'
+                },
+                'de': {
+                    'page-title': 'Startseite - Meine Agentur-Website',
+                    'nav-home': 'Startseite',
+                    'nav-tours': 'Touren',
+                    'nav-activities': 'Aktivitäten',
+                    'nav-map': 'Karte',
+                    'nav-about': 'Über uns',
+                    'nav-contact': 'Kontakt',
+                    'auth-login': 'Anmelden',
+                    'auth-register': 'Registrieren',
+                    'hero-title': 'Sind Sie bereit für die Tour Ihrer Träume?',
+                    'hero-subtitle': 'Die beliebtesten Reiserouten in der Türkei und weltweit, unvergessliche Erlebnisse warten auf Sie.',
+                    'placeholder-search': 'Suche nach einer Tour...',
+                    'option-all-regions': 'Alle Regionen',
+                    'option-black-sea': 'Schwarzes Meer',
+                    'option-mediterranean': 'Mittelmeer',
+                    'option-aegean': 'Ägäis',
+                    'btn-search': 'Suchen',
+                    'featured-tours-title': 'Empfohlene Touren',
+                    'tour-italy-title': 'Klassische Italien-Tour',
+                    'tour-italy-description': 'Ein unvergessliches Erlebnis vom Kolosseum bis zu den Kanälen von Venedig.',
+                    'btn-details': 'Details anzeigen',
+                    'tour-cappadocia-title': 'Kappadokien-Ballonfahrt',
+                    'tour-cappadocia-description': 'Beobachten Sie die Feenkamine vom Himmel aus.',
+                    'tour-balkans-title': 'Balkan-Tour',
+                    'tour-balkans-description': 'Ein Abenteuer, bei dem Geschichte und Natur miteinander verwoben sind.',
+                    'tour-aegean-title': 'Ägäis- & Mittelmeerküstentour',
+                    'tour-aegean-description': 'Eine tiefblaue Reise von İzmir nach Antalya.',
+                    'blog-title': 'Aus unserem Reisetagebuch',
+                    'blog-category-1': 'REISEFÜHRER',
+                    'blog-post-1-title': 'Wann ist die beste Zeit für eine Ballonfahrt in Kappadokien?',
+                    'blog-post-1-excerpt': 'Welche Jahreszeit sollten Sie wählen, um diese magischen Momente einzufangen, in denen Ballons am Himmel tanzen? Hier sind unsere speziellen Tipps...',
+                    'btn-read-more': 'Weiterlesen →',
+                    'blog-category-2': 'TIPPS',
+                    'blog-post-2-title': '5 wunderbare Balkanländer, die Sie ohne Visum besuchen können',
+                    'blog-post-2-excerpt': 'Schnappen Sie sich Ihren Reisepass und begeben Sie sich auf eine tolle Balkan-Tour ohne Visum! Hier sind unsere speziellen Routenvorschläge...',
+                    'blog-category-3': 'GAUMENFREUDEN',
+                    'blog-post-3-title': '10 Köstlichkeiten, die Sie in Italien probieren müssen',
+                    'blog-post-3-excerpt': 'Sind Sie bereit, jenseits von Pizza und Pasta die lokalen Geschmacksrichtungen Italiens zu entdecken? Hier ist unser Gourmet-Guide...',
+                    'feature-title-1': 'Expertenrouten',
+                    'feature-description-1': 'Von unserem Expertenteam vorbereitete, erprobte und beste Routen.',
+                    'feature-title-2': '100% sichere Zahlung',
+                    'feature-description-2': 'Alle Ihre Zahlungen sind mit SSL-Zertifikaten und den neuesten Sicherheitssystemen geschützt.',
+                    'feature-title-3': 'Professionelle Reiseführer',
+                    'feature-description-3': 'Bölgeye hakim, lisanslı ve tecrübeli rehberlerle çalışma garantisi.',
+                    'feature-title-4': '7/24 Unterstützung',
+                    'feature-description-4': 'Wir sind vor und während der Tour für Sie da, nur einen Anruf entfernt.',
+                    'testimonials-title': 'Diejenigen, die mit uns gereist sind, erzählen',
+                    'testimonial-1-text': '“It was the most organized and fun tour I have ever experienced. Our guide had thought of every detail. I will definitely choose them again.”',
+                    'testimonial-1-author': 'Ayşe Yılmaz',
+                    'testimonial-1-tour': 'Balkan-Tour',
+                    'testimonial-2-text': '“At first, I had my doubts, but there was such a warm atmosphere during the tour that I felt like I was on vacation with friends. Thanks for everything!”',
+                    'testimonial-2-author': 'John Smith',
+                    'testimonial-2-tour': 'Ägäis- & Mittelmeerküstentour',
+                    'testimonial-3-text': '“Seeing the routes on the map and then experiencing them in person is eine unglaubliche Erfahrung. Eine wunderbare Agentur, die Technologie und Herzlichkeit vereint.”',
+                    'testimonial-3-author': 'Fatma Demir',
+                    'testimonial-3-tour': 'Klassische Italien-Tour',
+                    'footer-title': 'LG Tourismus',
+                    'footer-about': 'Mit unserer Agentur, die aus der Leidenschaft von zwei Brüdern für das Reisen entstanden ist, heißen wir Sie zu Abenteuern auf der ganzen Welt willkommen. Sie sind am richtigen Ort, um unvergessliche Erinnerungen zu sammeln.',
+                    'footer-links-title': 'Schnell-Links',
+                    'footer-contact-title': 'Kontakt',
+                    'footer-address': '📍 Adresse: Musterstraße. Wanderer Allee. Nr.12/3 Kadıköy, Istanbul',
+                    'footer-phone': '📞 Telefon: +90 555 123 45 67',
+                    'footer-email': '✉️ E-Mail: bilgi@lgturizm.com',
+                    'footer-social-title': 'Folgen Sie uns',
+                    'footer-copyright': '&copy; 2025 LG Tourismus. Alle Rechte vorbehalten.'
+                }
+            };
+
+            // Sayfadaki metinleri seçilen dile göre güncelleyen fonksiyon
+            function setLanguage(lang) {
+                document.querySelectorAll('[data-i18n]').forEach(element => {
+                    const key = element.getAttribute('data-i18n');
+                    if (translations[lang] && translations[lang][key]) {
+                        // Eğer element bir input ise placeholder'ını değiştir
+                        if (element.tagName === 'INPUT' && element.hasAttribute('placeholder')) {
+                            element.setAttribute('placeholder', translations[lang][key]);
+                        } else {
+                            element.textContent = translations[lang][key];
+                        }
+                    }
+                });
+                // Seçilen dili localStorage'a kaydet
+                localStorage.setItem('selectedLang', lang);
+                document.documentElement.lang = lang;
+            }
+
+            const langOptions = document.querySelectorAll('.lang-option');
+            langOptions.forEach(option => {
+                option.addEventListener('click', function(e) {
+                    e.preventDefault();
+                    const lang = this.getAttribute('data-lang');
+                    setLanguage(lang);
+                });
+            });
+
+            // Sayfa yüklendiğinde, localStorage'da kayıtlı dil varsa onu kullan, yoksa 'tr' (Türkçe) varsayılan dili kullan.
+            const savedLang = localStorage.getItem('selectedLang') || 'tr';
+            setLanguage(savedLang);
+        });
+        
+    </script>
+    
+</body>
+</html>
